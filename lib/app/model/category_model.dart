@@ -15,4 +15,8 @@ class Category {
     data['title'] = this.title;
     return data;
   }
+
+  Map toJson2() {
+    return {'id': id, 'title': title};
+  }
 }

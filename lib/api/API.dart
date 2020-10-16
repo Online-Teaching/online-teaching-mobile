@@ -9,3 +9,8 @@ class API {
     return http.get(url);
   }
 }
+
+/// search bar ekle
+/// core
+/// giriş ekranı
+/// navigation
