@@ -10,7 +10,6 @@ class API {
   }
 }
 
-/// search bar ekle
 /// core
 /// giriş ekranı
 /// navigation
