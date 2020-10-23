@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:http/http.dart' as http;
 
-import '../../view_model/category_page_view_model.dart';
+import 'category_page_view_model.dart';
 
 class CategoryView extends CategoryViewModel {
+  int _selectedIndex;
   @override
   void initState() {
     super.initState();
@@ -15,6 +16,10 @@ class CategoryView extends CategoryViewModel {
 
   @override
   Widget build(BuildContext context) {
+    List<String> kategori = new List<String>();
+    for (var c in categories) {
+      kategori.add(c.title);
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -35,7 +40,7 @@ class CategoryView extends CategoryViewModel {
             icon: Icon(Icons.search),
             color: Colors.black,
             onPressed: () {
-              showSearch(context: context, delegate: DataSearch());
+              showSearch(context: context, delegate: DataSearch(kategori));
             },
           )
         ],
@@ -48,7 +53,7 @@ class CategoryView extends CategoryViewModel {
   Container futureBuilderCategories() {
     return Container(
       child: FutureBuilder(
-        future: getData(),
+        future: getList(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return Container(child: Center(child: Text("Loading...")));
@@ -57,33 +62,35 @@ class CategoryView extends CategoryViewModel {
                 itemCount: categories.length,
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) =>
-                    categoryCard(categories[index]));
+                    categoryCard(categories[index], index));
           }
         },
       ),
     );
   }
 
-  Container categoryCard(Category category) => Container(
+  Container categoryCard(Category category, int index) => Container(
           child: Card(
-        child: ListTile(title: Text(category.title)),
+        child: ListTile(
+          selected: index == _selectedIndex,
+          title: Text(category.title),
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+              selecaItem(category.title);
+            });
+          },
+        ),
       ));
 }
 
 class DataSearch extends SearchDelegate<String> {
-  final categoriesList = [
-    "elma",
-    "armut",
-    "muz",
-    "kayısı",
-    "çilek",
-    "kavun",
-    "ananas"
-  ];
+  final List<String> categories;
+
+  DataSearch(this.categories);
+
   final recentCategories = [
-    "çilek",
-    "elma",
-    "muz",
+    "",
   ];
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -109,21 +116,19 @@ class DataSearch extends SearchDelegate<String> {
   }
 
   @override
-  Widget buildResults(BuildContext context) {
-    return Text(query);
-  }
+  Widget buildResults(BuildContext context) {}
 
   @override
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.isEmpty
         ? recentCategories
-        : categoriesList.where((p) => p.contains(query)).toList();
+        : categories.where((p) => p.contains(query)).toList();
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
           onTap: () {
-            showResults(context);
+            close(context, null);
+            selecaItem(suggestionList[index]);
           },
-          leading: Icon(Icons.adjust),
           title: RichText(
               text: TextSpan(
                   text: suggestionList[index].substring(0, query.length),
@@ -139,4 +144,8 @@ class DataSearch extends SearchDelegate<String> {
       itemCount: suggestionList.length,
     );
   }
+}
+
+void selecaItem(String category_name) {
+  print(category_name); //// bu name ile özet sayfasına gidilir.
 }
