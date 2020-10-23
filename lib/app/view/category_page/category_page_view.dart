@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:http/http.dart' as http;
 
-import '../../view_model/category_page_view_model.dart';
+import 'category_page_view_model.dart';
 
 class CategoryView extends CategoryViewModel {
   int _selectedIndex;
@@ -53,7 +53,7 @@ class CategoryView extends CategoryViewModel {
   Container futureBuilderCategories() {
     return Container(
       child: FutureBuilder(
-        future: getData(),
+        future: getList(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data == null) {
             return Container(child: Center(child: Text("Loading...")));
