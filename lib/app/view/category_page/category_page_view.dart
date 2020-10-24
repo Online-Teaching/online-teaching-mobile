@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'category_page_view_model.dart';
 
 class CategoryView extends CategoryViewModel {
@@ -33,7 +33,7 @@ class CategoryView extends CategoryViewModel {
         ),
         title: Text(
           "Categories",
-          style: TextStyle(color: Colors.black, fontSize: 21),
+          style: context.textTheme.headline5.copyWith(color: Colors.black),
         ),
         actions: [
           IconButton(
@@ -132,14 +132,14 @@ class DataSearch extends SearchDelegate<String> {
           title: RichText(
               text: TextSpan(
                   text: suggestionList[index].substring(0, query.length),
-                  style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
+                  style:
+                      context.textTheme.headline6.copyWith(color: Colors.black),
                   children: [
                 TextSpan(
-                    text: suggestionList[index].substring(query.length),
-                    style: TextStyle(fontSize: 17, color: Colors.grey))
+                  text: suggestionList[index].substring(query.length),
+                  style:
+                      context.textTheme.headline6.copyWith(color: Colors.grey),
+                )
               ]))),
       itemCount: suggestionList.length,
     );
