@@ -26,6 +26,9 @@ dependencies:
   http: 0.12.2
   dio: 1.0.0
   flappy_search_bar: ^1.4.1
+  lottie: 0.7.0+1
+
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,6 +44,9 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - assets/images/
+    - assets/lottie_json/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
