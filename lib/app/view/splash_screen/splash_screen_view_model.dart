@@ -9,7 +9,7 @@ abstract class SplashViewModel extends State<Splash> {
         Duration(
           seconds: 3,
         ), () {
-      print("end of splash");
+      print("splash");
     });
   }
 }

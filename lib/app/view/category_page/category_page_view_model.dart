@@ -11,12 +11,12 @@ abstract class CategoryViewModel extends State<CategoryScreen> {
   final baseUrl = "https://online-teaching-14e16.firebaseio.com";
   bool isLoading = false;
   List<Category> categories = [];
-  ICategoryService notificationService;
+  ICategoryService categoryservice;
 
   @override
   void initState() {
     super.initState();
-    notificationService = CategoryService.instance;
+    categoryservice = CategoryService.instance;
     getList();
   }
 
@@ -50,7 +50,7 @@ abstract class CategoryViewModel extends State<CategoryScreen> {
 */
   Future<void> getList() async {
     if (categories.isEmpty) {
-      categories = await notificationService.getCategoriesList();
+      categories = await categoryservice.getCategoriesList();
     }
 
     return categories;
