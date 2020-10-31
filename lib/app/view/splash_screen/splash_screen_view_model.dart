@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
+import 'package:online_teaching_mobile/core/init/navigation/INavigationService.dart';
 
-abstract class SplashViewModel extends State<Splash> {
+abstract class SplashViewModel extends State<Splash> with BaseViewModel {
   @override
   void initState() {
     super.initState();
@@ -12,4 +13,8 @@ abstract class SplashViewModel extends State<Splash> {
       print("splash");
     });
   }
+}
+
+abstract class BaseViewModel {
+  NavigationService navigation = NavigationService.instance;
 }

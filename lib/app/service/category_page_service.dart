@@ -5,7 +5,7 @@ import 'interfaces/ICategoryService.dart';
 import 'package:http/http.dart' as http;
 
 class CategoryService implements ICategoryService {
-  List<Category> categories = [];
+  static List<Category> categories = [];
   static CategoryService _instance;
   static CategoryService get instance {
     if (_instance == null) _instance = CategoryService._init();
@@ -20,8 +20,10 @@ class CategoryService implements ICategoryService {
     var _response = await http.get("$baseUrl/.json");
     var jsonData = json.decode(_response.body);
 
-    for (var c in jsonData) {
-      categories.add(Category.fromJson(c));
+    if (categories.isEmpty) {
+      for (var c in jsonData) {
+        categories.add(Category.fromJson(c));
+      }
     }
 
     return categories;

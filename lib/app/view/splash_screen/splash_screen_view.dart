@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
+import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class SplashView extends SplashViewModel {
@@ -34,7 +35,10 @@ class SplashView extends SplashViewModel {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(context.mediumValue),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      navigation.navigateToPage(
+                          path: NavigationConstants.CATEGORY_VIEW, data: 20);
+                    },
                   ),
                 )
               ],
