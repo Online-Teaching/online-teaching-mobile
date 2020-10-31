@@ -4,20 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/category_page_service.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategoryService.dart';
+import 'package:online_teaching_mobile/core/init/navigation/INavigationService.dart';
 import 'category_page.dart';
 import 'package:http/http.dart' as http;
 
-abstract class CategoryViewModel extends State<CategoryScreen> {
+abstract class CategoryViewModel extends State<CategoryScreen>
+    with BaseViewModel {
   final baseUrl = "https://online-teaching-14e16.firebaseio.com";
   bool isLoading = false;
   List<Category> categories = [];
+  List<String> categories_name = [];
   ICategoryService categoryservice;
 
   @override
   void initState() {
     super.initState();
     categoryservice = CategoryService.instance;
-    getList();
   }
 
   @override
@@ -36,23 +38,18 @@ abstract class CategoryViewModel extends State<CategoryScreen> {
     });
   }
 
-/*
-  Future<void> getNotificationsLists() async {
-    var _response = await http.get("$baseUrl/.json");
-    var jsonData = json.decode(_response.body);
-
-    for (var c in jsonData) {
-      categories.add(Category.fromJson(c));
-    }
-
-    return categories;
-  }
-*/
   Future<void> getList() async {
-    if (categories.isEmpty) {
-      categories = await categoryservice.getCategoriesList();
-    }
-
+    categories = await categoryservice.getCategoriesList();
     return categories;
   }
+
+  Future<void> getCategoriesName() async {
+    for (var c in categories) {
+      categories_name.add(c.title);
+    }
+  }
+}
+
+abstract class BaseViewModel {
+  NavigationService navigation = NavigationService.instance;
 }

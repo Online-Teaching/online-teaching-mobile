@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'category_page_view_model.dart';
 
@@ -16,10 +17,6 @@ class CategoryView extends CategoryViewModel {
 
   @override
   Widget build(BuildContext context) {
-    List<String> kategori = new List<String>();
-    for (var c in categories) {
-      kategori.add(c.title);
-    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -40,7 +37,9 @@ class CategoryView extends CategoryViewModel {
             icon: Icon(Icons.search),
             color: Colors.black,
             onPressed: () {
-              showSearch(context: context, delegate: DataSearch(kategori));
+              showSearch(
+                  context: context,
+                  delegate: DataSearch(categories_name, navigation));
             },
           )
         ],
@@ -77,7 +76,7 @@ class CategoryView extends CategoryViewModel {
           onTap: () {
             setState(() {
               _selectedIndex = index;
-              selecaItem(category.title);
+              selecaItem(category.title, navigation);
             });
           },
         ),
@@ -86,8 +85,9 @@ class CategoryView extends CategoryViewModel {
 
 class DataSearch extends SearchDelegate<String> {
   final List<String> categories;
+  var navigation;
 
-  DataSearch(this.categories);
+  DataSearch(this.categories, this.navigation);
 
   final recentCategories = [
     "",
@@ -123,11 +123,12 @@ class DataSearch extends SearchDelegate<String> {
     final suggestionList = query.isEmpty
         ? recentCategories
         : categories.where((p) => p.contains(query)).toList();
+
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
           onTap: () {
             close(context, null);
-            selecaItem(suggestionList[index]);
+            selecaItem(suggestionList[index], navigation);
           },
           title: RichText(
               text: TextSpan(
@@ -146,6 +147,7 @@ class DataSearch extends SearchDelegate<String> {
   }
 }
 
-void selecaItem(String category_name) {
+void selecaItem(String category_name, navigation) {
   print(category_name); //// bu name ile özet sayfasına gidilir.
+  navigation.navigateToPage(path: NavigationConstants.SPLASH_VIEW, data: 20);
 }
