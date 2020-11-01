@@ -4,6 +4,8 @@ import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
+import 'package:online_teaching_mobile/app/view/summary_page/summary.dart';
+import 'package:online_teaching_mobile/app/view/summary_page/summary_view.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 
 class NavigationRoute {
@@ -21,6 +23,9 @@ class NavigationRoute {
       case NavigationConstants.CATEGORY_VIEW:
         return normalNavigate(CategoryScreen(), args.arguments);
         break;
+      case NavigationConstants.SUMMARY_VIEW:
+        return normalNavigate(Summary(), args.arguments);
+        break;
 
       default:
         return MaterialPageRoute(
@@ -33,7 +38,7 @@ class NavigationRoute {
     }
   }
 
-  MaterialPageRoute normalNavigate(Widget widget, int id) {
+  MaterialPageRoute normalNavigate(Widget widget, Object id) {
     return MaterialPageRoute(
       builder: (context) => widget,
       settings: RouteSettings(

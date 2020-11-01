@@ -13,7 +13,6 @@ abstract class CategoryViewModel extends State<CategoryScreen>
   final baseUrl = "https://online-teaching-14e16.firebaseio.com";
   bool isLoading = false;
   List<Category> categories = [];
-  List<String> categories_name = [];
   ICategoryService categoryservice;
 
   @override
@@ -41,12 +40,6 @@ abstract class CategoryViewModel extends State<CategoryScreen>
   Future<void> getList() async {
     categories = await categoryservice.getCategoriesList();
     return categories;
-  }
-
-  Future<void> getCategoriesName() async {
-    for (var c in categories) {
-      categories_name.add(c.title);
-    }
   }
 }
 
