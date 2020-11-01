@@ -66,7 +66,7 @@ class QuizView extends QuizViewModel {
                           child: new Text("Close"),
                           onPressed: () {
                             complete = false;
-                            navigation.navigateToPage(
+                            navigation.navigateToPageClear(
                                 path: NavigationConstants.CATEGORY_VIEW);
                           },
                         ),
@@ -79,7 +79,7 @@ class QuizView extends QuizViewModel {
                     steps: steps,
                     type: stepperType,
                     currentStep: currentStep,
-                    //  onStepTapped: (step) => setState(() => currentStep = step),
+                    onStepTapped: (step) => setState(() => currentStep = step),
                     onStepContinue: true
                         ? () => setState(() {
                               calculate_points(currentStep);

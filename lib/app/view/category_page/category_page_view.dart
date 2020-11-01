@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:http/http.dart' as http;
@@ -21,6 +22,38 @@ class CategoryView extends CategoryViewModel {
     for (var item in categories) {
       categories_name.add(item.title);
     }
+
+    return WillPopScope(
+        child: myscaffold(context, categories_name),
+        onWillPop: () {
+          return showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Confirm Exit"),
+                  content: Text("Are you sure you want to exit?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("YES"),
+                      onPressed: () {
+                        SystemNavigator.pop();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text("NO"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              });
+          return Future.value(true);
+        });
+  }
+
+  Scaffold myscaffold(BuildContext context, List<String> categories_name) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,

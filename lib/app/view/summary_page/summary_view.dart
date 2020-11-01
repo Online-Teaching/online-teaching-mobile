@@ -80,9 +80,9 @@ class SummaryView extends SummaryViewModel {
                   child: FlatButton(
                     color: Colors.green,
                     child: Text(
-                      "Anladım",
+                      "Solve Quiz",
                       style: TextStyle(
-                          fontSize: context.normalValue, color: Colors.white),
+                          fontSize: context.mediumValue, color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(context.mediumValue),

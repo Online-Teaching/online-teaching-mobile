@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
@@ -8,6 +9,37 @@ import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 class SplashView extends SplashViewModel {
   @override
   Widget build(BuildContext context) {
+    return WillPopScope(
+        child: myScaffoldWidget(context),
+        onWillPop: () {
+          return showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Confirm Exit"),
+                  content: Text("Are you sure you want to exit?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("YES"),
+                      onPressed: () {
+                        SystemNavigator.pop();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text("NO"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              });
+          return Future.value(true);
+        });
+  }
+
+  Scaffold myScaffoldWidget(BuildContext context) {
     return Scaffold(
       body: Container(
         child: Column(
@@ -28,9 +60,9 @@ class SplashView extends SplashViewModel {
                   child: FlatButton(
                     color: Colors.green,
                     child: Text(
-                      "Başla",
+                      "Let's Start",
                       style: TextStyle(
-                          fontSize: context.normalValue, color: Colors.white),
+                          fontSize: context.mediumValue, color: Colors.white),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(context.mediumValue),
