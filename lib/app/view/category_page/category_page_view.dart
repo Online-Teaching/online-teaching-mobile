@@ -30,7 +30,9 @@ class CategoryView extends CategoryViewModel {
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            navigation.navigateToPage(path: NavigationConstants.SPLASH_VIEW);
+          },
         ),
         title: Text(
           "Categories",
