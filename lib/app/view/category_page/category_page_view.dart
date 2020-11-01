@@ -17,6 +17,10 @@ class CategoryView extends CategoryViewModel {
 
   @override
   Widget build(BuildContext context) {
+    List<String> categories_name = new List<String>();
+    for (var item in categories) {
+      categories_name.add(item.title);
+    }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -37,19 +41,22 @@ class CategoryView extends CategoryViewModel {
             icon: Icon(Icons.search),
             color: Colors.black,
             onPressed: () {
-              showSearch(
-                  context: context,
-                  delegate: DataSearch(categories_name, navigation));
+              this.setState(() {
+                showSearch(
+                    context: context,
+                    delegate:
+                        DataSearch(categories_name, navigation, categories));
+              });
             },
           )
         ],
       ),
       drawer: Drawer(),
-      body: futureBuilderCategories(),
+      body: futureBuilderCategories(categories),
     );
   }
 
-  Container futureBuilderCategories() {
+  Container futureBuilderCategories(List<Category> c) {
     return Container(
       child: FutureBuilder(
         future: getList(),
@@ -76,7 +83,7 @@ class CategoryView extends CategoryViewModel {
           onTap: () {
             setState(() {
               _selectedIndex = index;
-              selecaItem(category.title, navigation);
+              selecaItem(navigation, categories[index]);
             });
           },
         ),
@@ -84,10 +91,10 @@ class CategoryView extends CategoryViewModel {
 }
 
 class DataSearch extends SearchDelegate<String> {
-  final List<String> categories;
+  final List<String> categories_name_list;
   var navigation;
-
-  DataSearch(this.categories, this.navigation);
+  final List<Category> categoryList;
+  DataSearch(this.categories_name_list, this.navigation, this.categoryList);
 
   final recentCategories = [
     "",
@@ -122,13 +129,15 @@ class DataSearch extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     final suggestionList = query.isEmpty
         ? recentCategories
-        : categories.where((p) => p.contains(query)).toList();
+        : categories_name_list
+            .where((p) => p.toUpperCase().contains(query.toUpperCase()))
+            .toList();
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
           onTap: () {
             close(context, null);
-            selecaItem(suggestionList[index], navigation);
+            findItem(navigation, suggestionList[index]);
           },
           title: RichText(
               text: TextSpan(
@@ -145,9 +154,18 @@ class DataSearch extends SearchDelegate<String> {
       itemCount: suggestionList.length,
     );
   }
+
+  void findItem(navigation, String category_name) {
+    print(category_name);
+    for (var item in categoryList) {
+      if (category_name == item.title) {
+        selecaItem(navigation, item);
+      }
+    }
+  }
 }
 
-void selecaItem(String category_name, navigation) {
-  print(category_name); //// bu name ile özet sayfasına gidilir.
-  navigation.navigateToPage(path: NavigationConstants.SPLASH_VIEW, data: 20);
+void selecaItem(navigation, Category selected_category) {
+  navigation.navigateToPage(
+      path: NavigationConstants.SUMMARY_VIEW, data: selected_category);
 }
