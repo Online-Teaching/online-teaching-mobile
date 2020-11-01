@@ -18,7 +18,9 @@ class SummaryView extends SummaryViewModel {
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
-          onPressed: () {},
+          onPressed: () {
+            navigation.navigateToPage(path: NavigationConstants.CATEGORY_VIEW);
+          },
         ),
         title: Text(
           "Subject Summary",
@@ -87,7 +89,7 @@ class SummaryView extends SummaryViewModel {
                     ),
                     onPressed: () {
                       navigation.navigateToPage(
-                          path: NavigationConstants.CATEGORY_VIEW, data: 10);
+                          path: NavigationConstants.QUIZ_VIEW, data: 10);
                     },
                   ),
                 ),

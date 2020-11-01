@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
+import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
 import 'package:online_teaching_mobile/app/view/summary_page/summary.dart';
 import 'package:online_teaching_mobile/app/view/summary_page/summary_view.dart';
@@ -26,7 +27,9 @@ class NavigationRoute {
       case NavigationConstants.SUMMARY_VIEW:
         return normalNavigate(Summary(), args.arguments);
         break;
-
+      case NavigationConstants.QUIZ_VIEW:
+        return normalNavigate(Quiz(), args.arguments);
+        break;
       default:
         return MaterialPageRoute(
           builder: (context) => Scaffold(
