@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:online_teaching_mobile/app/model/question_model.dart';
+import 'package:online_teaching_mobile/app/model/category_model.dart';
+import 'package:online_teaching_mobile/app/model/quiz_model.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class QuizView extends QuizViewModel {
+  MyQuiz quizz;
   //radiobutton
   int selectedRadioTile;
   int correct_answer = 0;
@@ -30,8 +34,8 @@ class QuizView extends QuizViewModel {
 
   @override
   Widget build(BuildContext context) {
+    quizz = ModalRoute.of(context).settings.arguments;
     build_stapper();
-
     return new Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -51,72 +55,78 @@ class QuizView extends QuizViewModel {
             style: context.textTheme.headline5.copyWith(color: Colors.black),
           ),
         ),
-        body: Column(children: <Widget>[
-          complete
-              ? Expanded(
-                  child: Center(
-                    child: AlertDialog(
-                      title: new Text("Puanınız"),
-                      content: new Text(
-                        "${correct_answer * 10}",
-                        style: TextStyle(fontSize: 30),
-                      ),
-                      actions: <Widget>[
-                        new FlatButton(
-                          child: new Text("Close"),
-                          onPressed: () {
-                            complete = false;
-                            navigation.navigateToPageClear(
-                                path: NavigationConstants.CATEGORY_VIEW);
-                          },
-                        ),
-                      ],
+        body: myScaffoldWidget());
+  }
+
+  Column myScaffoldWidget() {
+    return Column(children: <Widget>[
+      complete
+          ? Expanded(
+              child: Center(
+                child: AlertDialog(
+                  title: new Text("Puanınız"),
+                  content: new Text(
+                    "${correct_answer * 10}",
+                    style: TextStyle(fontSize: 30),
+                  ),
+                  actions: <Widget>[
+                    new FlatButton(
+                      child: new Text("Close"),
+                      onPressed: () {
+                        complete = false;
+                        navigation.navigateToPageClear(
+                            path: NavigationConstants.CATEGORY_VIEW);
+                      },
                     ),
-                  ),
-                )
-              : Expanded(
-                  child: Stepper(
-                    steps: steps,
-                    type: stepperType,
-                    currentStep: currentStep,
-                    onStepTapped: (step) => setState(() => currentStep = step),
-                    onStepContinue: true
-                        ? () => setState(() {
-                              calculate_points(currentStep);
-                              if (currentStep != 9)
-                                ++currentStep;
-                              else if (currentStep == 9) {
-                                print("test bitti başka sayfaya geç");
-                                complete = true;
-                              }
-                            })
-                        : null,
-                    /*
-                    onStepCancel: true
-                        ? () => setState(() {
-                            if (currentStep == 0) {
-                              print("geri gidiliyor..");
-                            } else {
-                              --currentStep;
-                            }
-                          })
-                      : null,
-                      */
-                  ),
+                  ],
                 ),
-        ]));
+              ),
+            )
+          : Expanded(
+              child: Stepper(
+                steps: steps,
+                type: stepperType,
+                currentStep: currentStep,
+                onStepTapped: (step) => setState(() => currentStep = step),
+                onStepContinue: true
+                    ? () => setState(() {
+                          print("heyyyyy nuuuuuuuuuuulllllllllllll");
+
+                          calculate_points(currentStep);
+                          if (currentStep != 9)
+                            ++currentStep;
+                          else if (currentStep == 9) {
+                            print("test bitti başka sayfaya geç");
+                            complete = true;
+                          }
+                        })
+                    : null,
+                /*
+                  onStepCancel: true
+                      ? () => setState(() {
+                          if (currentStep == 0) {
+                            print("geri gidiliyor..");
+                          } else {
+                            --currentStep;
+                          }
+                        })
+                    : null,
+                    */
+              ),
+            ),
+    ]);
   }
 
   void calculate_points(int index) {
-    if (soruList10[index].correct == selectedRadioTile) {
+    if (quizz.questionList[index].correct == selectedRadioTile) {
       correct_answer++;
-      print(soruList10[index].correct.toString() +
+      print(quizz.questionList[index].correct.toString() +
           "            " +
           selectedRadioTile.toString());
       print(correct_answer);
     } else {
       wrong_answer++;
-      print(soruList10[index].correct.toString() +
+      print(quizz.questionList[index].correct.toString() +
           "            " +
           selectedRadioTile.toString());
       print(wrong_answer);
@@ -151,14 +161,14 @@ class QuizView extends QuizViewModel {
             child: Column(
               children: [
                 Text(
-                  soruList10[i].question,
+                  quizz.questionList[i].question,
                   style:
                       context.textTheme.bodyText1.copyWith(color: Colors.black),
                 ),
-                eachRadioButton(soruList10[i].answer1, 1),
-                eachRadioButton(soruList10[i].answer2, 2),
-                eachRadioButton(soruList10[i].answer3, 3),
-                eachRadioButton(soruList10[i].answer4, 4),
+                eachRadioButton(quizz.questionList[i].answer1, 1),
+                eachRadioButton(quizz.questionList[i].answer2, 2),
+                eachRadioButton(quizz.questionList[i].answer3, 3),
+                eachRadioButton(quizz.questionList[i].answer4, 4),
               ],
             ),
           ),

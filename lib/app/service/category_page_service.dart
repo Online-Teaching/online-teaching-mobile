@@ -1,7 +1,7 @@
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/api/API.dart';
 import 'dart:convert';
-import 'interfaces/ICategoryService.dart';
+import 'interfaces/ICategory.dart';
 import 'package:http/http.dart' as http;
 
 class CategoryService implements ICategoryService {

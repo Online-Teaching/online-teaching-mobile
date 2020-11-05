@@ -3,11 +3,20 @@ import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view/summary_page/summary_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+
+int id = id != null ? id : 0;
 
 class SummaryView extends SummaryViewModel {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Category category = ModalRoute.of(context).settings.arguments;
+    id = category.id;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -19,7 +28,7 @@ class SummaryView extends SummaryViewModel {
             color: Colors.black,
           ),
           onPressed: () {
-            navigation.navigateToPage(path: NavigationConstants.CATEGORY_VIEW);
+            //navigation.navigateToPage(path: NavigationConstants.CATEGORY_VIEW);
           },
         ),
         title: Text(
@@ -87,10 +96,10 @@ class SummaryView extends SummaryViewModel {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(context.mediumValue),
                     ),
-                    onPressed: () {
-                      navigation.navigateToPage(
-                          path: NavigationConstants.QUIZ_VIEW, data: 10);
-                    },
+                    onPressed: () => showDialog(
+                      context: context,
+                      builder: (context) => buildProgressBar(),
+                    ),
                   ),
                 ),
               ),
@@ -100,5 +109,24 @@ class SummaryView extends SummaryViewModel {
         ),
       ),
     );
+  }
+
+  CircularPercentIndicator buildProgressBar() {
+    getquiz(id);
+    getquizlist();
+    return CircularPercentIndicator(
+      radius: 60.0,
+      lineWidth: 5.0,
+      percent: 1.0,
+      center: new Text("100%"),
+      progressColor: Colors.green,
+    );
+  }
+
+  void getquizlist() {
+    Future.delayed(Duration(milliseconds: 1000), () {
+      navigation.navigateToPage(
+          path: NavigationConstants.QUIZ_VIEW, data: quiz_for_current_category);
+    });
   }
 }

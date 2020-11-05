@@ -27,6 +27,8 @@ dependencies:
   dio: 1.0.0
   flappy_search_bar: ^1.4.1
   lottie: 0.7.0+1
+  percent_indicator: "^2.1.7+2"
+  syncfusion_flutter_gauges: ^18.2.44
 
 
 
