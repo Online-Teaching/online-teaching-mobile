@@ -1,5 +1,4 @@
-final baseUrl = "https://online-teaching-14e16.firebaseio.com/";
-final quizbaseUrl = "https://test-for-python-api.firebaseio.com/";
+import 'apiUrl.dart';
 
 class API {
   String baseurl() {

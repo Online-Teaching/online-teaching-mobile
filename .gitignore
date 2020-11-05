@@ -8,7 +8,7 @@
 .buildlog/
 .history
 .svn/
-apidemo.dart
+apiUrl.dart
 # IntelliJ related
 *.iml
 *.ipr
