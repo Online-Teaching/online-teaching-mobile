@@ -4,7 +4,7 @@ import 'package:online_teaching_mobile/app/view/category_page/category_page.dart
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
 
 import 'app/view/splash_screen/splash_screen.dart';
-import 'core/init/navigation/INavigationService.dart';
+import 'core/init/navigation/navigation_service.dart';
 import 'core/init/navigation/navigation_route.dart';
 
 void main() => runApp(MyApp());

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/category_page_service.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategory.dart';
-import 'package:online_teaching_mobile/core/init/navigation/INavigationService.dart';
+import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'category_page.dart';
 import 'package:http/http.dart' as http;
 
