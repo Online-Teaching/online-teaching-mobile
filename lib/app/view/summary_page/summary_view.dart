@@ -4,6 +4,7 @@ import 'package:online_teaching_mobile/app/view/summary_page/summary_view_model.
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:toast/toast.dart';
 
 int id = id != null ? id : 0;
 
@@ -28,7 +29,7 @@ class SummaryView extends SummaryViewModel {
             color: Colors.black,
           ),
           onPressed: () {
-            //navigation.navigateToPage(path: NavigationConstants.CATEGORY_VIEW);
+            navigation.navigateToPage(path: NavigationConstants.CATEGORY_VIEW);
           },
         ),
         title: Text(
@@ -124,9 +125,16 @@ class SummaryView extends SummaryViewModel {
   }
 
   void getquizlist() {
-    Future.delayed(Duration(milliseconds: 1000), () {
-      navigation.navigateToPage(
-          path: NavigationConstants.QUIZ_VIEW, data: quiz_for_current_category);
+    Future.delayed(Duration(milliseconds: 1300), () {
+      if (quiz_control == true) {
+        navigation.navigateToPage(
+            path: NavigationConstants.QUIZ_VIEW,
+            data: quiz_for_current_category);
+      } else {
+        Toast.show("Bu konunun Quiz'i bulunmamaktadır.", context,
+            duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        navigation.navigateToPageClear(path: NavigationConstants.CATEGORY_VIEW);
+      }
     });
   }
 }

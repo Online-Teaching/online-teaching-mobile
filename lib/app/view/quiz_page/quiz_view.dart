@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/quiz_model.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz_view_model.dart';
@@ -8,7 +9,7 @@ import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class QuizView extends QuizViewModel {
-  MyQuiz quizz;
+  MyQuiz quiz;
   //radiobutton
   int selectedRadioTile;
   int correct_answer = 0;
@@ -34,8 +35,39 @@ class QuizView extends QuizViewModel {
 
   @override
   Widget build(BuildContext context) {
-    quizz = ModalRoute.of(context).settings.arguments;
+    quiz = ModalRoute.of(context).settings.arguments;
     build_stapper();
+    return WillPopScope(
+        child: scaffoldWidget(context),
+        onWillPop: () {
+          return showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text("Confirm Exit"),
+                  content: Text("Are you sure you want to exit?"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("YES"),
+                      onPressed: () {
+                        SystemNavigator.pop();
+                      },
+                    ),
+                    FlatButton(
+                      child: Text("NO"),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    )
+                  ],
+                );
+              });
+          return Future.value(true);
+        });
+  }
+
+  Scaffold scaffoldWidget(BuildContext context) {
     return new Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -43,11 +75,12 @@ class QuizView extends QuizViewModel {
           elevation: 0,
           leading: IconButton(
             icon: Icon(
-              Icons.arrow_back_ios,
+              Icons.close,
               color: Colors.black,
             ),
             onPressed: () {
-              //  navigation.navigateToPage(path: NavigationConstants.SUMMARY_VIEW);
+              navigation.navigateToPage(
+                  path: NavigationConstants.CATEGORY_VIEW);
             },
           ),
           title: Text(
@@ -55,10 +88,10 @@ class QuizView extends QuizViewModel {
             style: context.textTheme.headline5.copyWith(color: Colors.black),
           ),
         ),
-        body: myScaffoldWidget());
+        body: quizViewWidget());
   }
 
-  Column myScaffoldWidget() {
+  Column quizViewWidget() {
     return Column(children: <Widget>[
       complete
           ? Expanded(
@@ -101,32 +134,21 @@ class QuizView extends QuizViewModel {
                           }
                         })
                     : null,
-                /*
-                  onStepCancel: true
-                      ? () => setState(() {
-                          if (currentStep == 0) {
-                            print("geri gidiliyor..");
-                          } else {
-                            --currentStep;
-                          }
-                        })
-                    : null,
-                    */
               ),
             ),
     ]);
   }
 
   void calculate_points(int index) {
-    if (quizz.questionList[index].correct == selectedRadioTile) {
+    if (quiz.questionList[index].correct == selectedRadioTile) {
       correct_answer++;
-      print(quizz.questionList[index].correct.toString() +
+      print(quiz.questionList[index].correct.toString() +
           "            " +
           selectedRadioTile.toString());
       print(correct_answer);
     } else {
       wrong_answer++;
-      print(quizz.questionList[index].correct.toString() +
+      print(quiz.questionList[index].correct.toString() +
           "            " +
           selectedRadioTile.toString());
       print(wrong_answer);
@@ -161,14 +183,14 @@ class QuizView extends QuizViewModel {
             child: Column(
               children: [
                 Text(
-                  quizz.questionList[i].question,
+                  quiz.questionList[i].question,
                   style:
                       context.textTheme.bodyText1.copyWith(color: Colors.black),
                 ),
-                eachRadioButton(quizz.questionList[i].answer1, 1),
-                eachRadioButton(quizz.questionList[i].answer2, 2),
-                eachRadioButton(quizz.questionList[i].answer3, 3),
-                eachRadioButton(quizz.questionList[i].answer4, 4),
+                eachRadioButton(quiz.questionList[i].answer1, 1),
+                eachRadioButton(quiz.questionList[i].answer2, 2),
+                eachRadioButton(quiz.questionList[i].answer3, 3),
+                eachRadioButton(quiz.questionList[i].answer4, 4),
               ],
             ),
           ),

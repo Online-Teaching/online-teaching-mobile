@@ -6,6 +6,7 @@ import 'package:online_teaching_mobile/app/view/summary_page/summary.dart';
 import 'package:online_teaching_mobile/core/init/navigation/INavigationService.dart';
 
 abstract class SummaryViewModel extends State<Summary> with BaseViewModel {
+  bool quiz_control = false;
   bool isLoading = false;
   MyQuiz quiz_for_current_category;
   IQuestionService questionService;
@@ -32,8 +33,15 @@ abstract class SummaryViewModel extends State<Summary> with BaseViewModel {
   }
 
   Future<void> getquiz(int id) async {
-    quiz_for_current_category = await questionService.getQuestionList(id);
-    return quiz_for_current_category;
+    try {
+      quiz_for_current_category = await questionService.getQuestionList(id);
+      quiz_control = true;
+      return quiz_for_current_category;
+    } on Exception catch (_) {
+      quiz_control = false;
+    } finally {
+      return Center();
+    }
   }
 }
 
