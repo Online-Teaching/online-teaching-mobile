@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
-import 'package:online_teaching_mobile/app/view/summary_page/summary_view_model.dart';
+import 'package:online_teaching_mobile/app/view_model/summary_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';

@@ -7,7 +7,7 @@ import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
-import 'category_page_view_model.dart';
+import '../../view_model/category_page_view_model.dart';
 
 class CategoryView extends CategoryViewModel {
   int _selectedIndex;
@@ -68,7 +68,7 @@ class CategoryView extends CategoryViewModel {
           },
         ),
         title: Text(
-          "Categories",
+          "Konular",
           style: context.textTheme.headline5.copyWith(color: Colors.black),
         ),
         actions: [

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/quiz_model.dart';
-import 'package:online_teaching_mobile/app/view/quiz_page/quiz_view_model.dart';
+import 'package:online_teaching_mobile/app/view_model/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
