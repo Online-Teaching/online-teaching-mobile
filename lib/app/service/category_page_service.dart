@@ -16,9 +16,10 @@ class CategoryService implements ICategoryService {
 
   Future<List<Category>> getCategoriesList() async {
     API api = new API();
-    final baseUrl = api.baseurl();
-    var _response = await http.get("$baseUrl/.json");
+    final baseUrl = api.getOnlineTeaching_2_Url();
+    var _response = await http.get("$baseUrl/kategoriler/mat.json");
     var jsonData = json.decode(_response.body);
+    //https://online-teaching2.firebaseio.com/kategoriler/mat.json
 
     if (categories.isEmpty) {
       for (var c in jsonData) {

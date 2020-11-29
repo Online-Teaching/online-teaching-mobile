@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view_model/home_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/extension/future_builder.dart';
 
 class HomeView extends HomeViewModel {
+  @override
   Icon icon = Icon(Icons.bookmark_border);
-  String ww = "Kategoriler";
-  List<int> categories = [9, 2, 3, 4, 5, 6, 7, 8, 3, 4, 5, 6, 3, 4, 5, 3];
+  int _selectedIndex;
   @override
   Widget build(BuildContext context) {
-    setState(() {});
     Size size = MediaQuery.of(context).size;
     // it enable scrolling on small device
     return Container(
@@ -27,108 +28,114 @@ class HomeView extends HomeViewModel {
         child: Container(
           //margin: EdgeInsets.all(10),
           //padding: EdgeInsets.all(10),
-
-          child: ListView.builder(
-              itemCount: categories.length,
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) =>
-                  categoryCard(categories[index], index)),
+          margin: EdgeInsets.only(top: 5),
+          child: FutureBuilder(
+              future: getList2(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return ListView.builder(
+                    itemCount: categories_name.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) =>
+                        categoryCard(categories_name[index], index));
+              }),
         ));
   }
 
   Expanded appbar(Size size, BuildContext context) {
     return Expanded(
       flex: 2,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 4),
-
-        /// searchin altındaki margin
-        // It will cover 20% of our total height
-
-        child: Stack(
-          children: <Widget>[
-            Container(
-              alignment: Alignment.topCenter,
-              padding: EdgeInsets.only(
-                top: 30,
-                left: 20,
-                right: 20,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            alignment: Alignment.topCenter,
+            padding: EdgeInsets.only(
+              top: 30,
+              left: 20,
+              right: 20,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(36),
+                bottomRight: Radius.circular(36),
               ),
+            ),
+            child: Text(
+              "Kategoriler",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline5
+                  .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              height: 54,
               decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(36),
-                  bottomRight: Radius.circular(36),
-                ),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    //offset: Offset(0, 1),
+                    blurRadius: 20,
+                    //  color: Colors.blue.withOpacity(0.23),
+                  ),
+                ],
               ),
-              child: Text(
-                "Kategoriler",
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(horizontal: 15),
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                height: 54,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      //offset: Offset(0, 1),
-                      blurRadius: 20,
-                      //  color: Colors.blue.withOpacity(0.23),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextField(
-                        onChanged: (value) {},
-                        decoration: InputDecoration(
-                          hintText: "Search",
-                          hintStyle: TextStyle(
-                            color: Colors.green.withOpacity(0.5),
-                          ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          // surffix isn't working properly  with SVG
-                          // thats why we use row
-                          // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) {},
+                      decoration: InputDecoration(
+                        hintText: "Search",
+                        hintStyle: TextStyle(
+                          color: Colors.green.withOpacity(0.5),
                         ),
-                        onTap: () {
-                          setState(() {});
-                        },
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        // surffix isn't working properly  with SVG
+                        // thats why we use row
+                        // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
                       ),
+                      onTap: () {
+                        setState(() {});
+                      },
                     ),
-                    Icon(Icons.search)
-                  ],
-                ),
+                  ),
+                  Icon(Icons.search)
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Container categoryCard(int category, int index) => Container(
+  Container categoryCard(String category, int index) => Container(
           child: Card(
         child: ListTile(
           title: Text(category.toString()),
-          leading: icon,
+          selected: index == _selectedIndex,
+          /*    leading: IconButton(
+            icon: icon,
+            onPressed: () {
+              icon = Icon(Icons.bookmark);
+            },
+          ),
+          */
+
+          /// seçilen dolsun gerisi boş
           onTap: () {
             setState(() {
-              icon = Icon(Icons.bookmark);
+              _selectedIndex = index;
               navigation.navigateToPage(path: NavigationConstants.DETAIL_VIEW);
             });
           },

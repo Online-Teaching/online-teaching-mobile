@@ -8,9 +8,10 @@ import 'package:online_teaching_mobile/app/view_model/bottom_navigation_view_mod
 class BottomNavigationView extends BottomNavigationViewModel {
   int _currentindex = 1;
 
-  final tabs = [Bookmark(), Home(), Profile()];
   @override
   Widget build(BuildContext context) {
+    List<String> sss = b_categories_name;
+    final tabs = [Bookmark(), Home(), Profile()];
     return Scaffold(
       body: tabs[_currentindex],
       bottomNavigationBar: BottomNavigationBar(

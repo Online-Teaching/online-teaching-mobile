@@ -32,7 +32,7 @@ abstract class QuizViewModel extends State<Quiz> with BaseViewModel {
     });
   }
 
-  Future<void> getquiz(int id) async {
+  Future<void> getquiz(String id) async {
     quiz_for_current_category = await questionService.getQuestionList(id);
     return quiz_for_current_category;
   }

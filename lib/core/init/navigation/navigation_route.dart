@@ -5,6 +5,7 @@ import 'package:online_teaching_mobile/app/view/bottom_navigation_page/bottom_na
 import 'package:online_teaching_mobile/app/view/category_page/category_page.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
 import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
+import 'package:online_teaching_mobile/app/view/home_page/home.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
 import 'package:online_teaching_mobile/app/view/summary_page/summary.dart';
@@ -37,6 +38,9 @@ class NavigationRoute {
         break;
       case NavigationConstants.BOTTOM_NAVIGATION:
         return normalNavigate(BottomNavigation(), args.arguments);
+        break;
+      case NavigationConstants.HOME:
+        return normalNavigate(Home(), args.arguments);
         break;
       default:
         return MaterialPageRoute(

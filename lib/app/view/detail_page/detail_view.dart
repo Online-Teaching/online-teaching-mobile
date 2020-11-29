@@ -22,30 +22,32 @@ class DetailView extends DetailViewModel {
     return Expanded(
       flex: 2,
       child: Container(
-        /// searchin altındaki margin
-        // It will cover 20% of our total height
-
-        child: Container(
-          alignment: Alignment.topCenter,
-          padding: EdgeInsets.only(
-            top: 30,
-            left: 20,
-            right: 20,
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.only(
+          top: 30,
+          left: 20,
+          right: 20,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
           ),
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              //offset: Offset(0, 1),
+              blurRadius: 10,
+              //  color: Colors.blue.withOpacity(0.23),
             ),
-          ),
-          child: Text(
-            "Türev",
-            style: Theme.of(context)
-                .textTheme
-                .headline5
-                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+          ],
+        ),
+        child: Text(
+          "Türev",
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -55,6 +57,7 @@ class DetailView extends DetailViewModel {
     return Expanded(
       flex: 11,
       child: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Container(
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.all(20),

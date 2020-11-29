@@ -116,6 +116,11 @@ class QuizView extends QuizViewModel {
               ),
             )
           : Expanded(
+              child: Theme(
+              data: ThemeData(
+                  accentColor: Colors.red,
+                  primarySwatch: Colors.deepPurple, //stepper linki
+                  colorScheme: ColorScheme.light(primary: Colors.orange)),
               child: Stepper(
                 steps: steps,
                 type: stepperType,
@@ -135,7 +140,7 @@ class QuizView extends QuizViewModel {
                         })
                     : null,
               ),
-            ),
+            )),
     ]);
   }
 
@@ -174,25 +179,21 @@ class QuizView extends QuizViewModel {
   }
 
   List<Widget> questionCard(int i) => <Widget>[
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(13),
-            child: Column(
-              children: [
-                Text(
-                  quiz.questionList[i].question,
-                  style:
-                      context.textTheme.bodyText1.copyWith(color: Colors.black),
-                ),
-                eachRadioButton(quiz.questionList[i].answer1, 1),
-                eachRadioButton(quiz.questionList[i].answer2, 2),
-                eachRadioButton(quiz.questionList[i].answer3, 3),
-                eachRadioButton(quiz.questionList[i].answer4, 4),
-              ],
-            ),
+        Container(
+          /// Container ı card ile sarmalayabilirsin !
+          padding: EdgeInsets.all(13),
+          child: Column(
+            children: [
+              Text(
+                quiz.questionList[i].question,
+                style:
+                    context.textTheme.bodyText1.copyWith(color: Colors.black),
+              ),
+              eachRadioButton(quiz.questionList[i].answer1, 1),
+              eachRadioButton(quiz.questionList[i].answer2, 2),
+              eachRadioButton(quiz.questionList[i].answer3, 3),
+              eachRadioButton(quiz.questionList[i].answer4, 4),
+            ],
           ),
         )
       ];

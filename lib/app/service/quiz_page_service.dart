@@ -16,7 +16,7 @@ class QuizService implements IQuestionService {
 
   QuizService._init();
 
-  Future<MyQuiz> getQuestionList([int id]) async {
+  Future<MyQuiz> getQuestionList([String id]) async {
     category_id = id != null ? id : 0;
     try {
       API api = new API();

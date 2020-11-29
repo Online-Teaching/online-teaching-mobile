@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 
 abstract class CategoryViewModel extends State<CategoryScreen>
     with BaseViewModel {
-  final baseUrl = "https://online-teaching-14e16.firebaseio.com";
+  //final baseUrl = "https://online-teaching-14e16.firebaseio.com";
   bool isLoading = false;
   List<Category> categories = [];
   ICategoryService categoryservice;

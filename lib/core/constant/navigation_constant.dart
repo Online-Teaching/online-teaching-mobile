@@ -5,4 +5,5 @@ class NavigationConstants {
   static const QUIZ_VIEW = "/quiz";
   static const DETAIL_VIEW = "/detail";
   static const BOTTOM_NAVIGATION = "/bottom_navigation";
+  static const HOME = "/home";
 }

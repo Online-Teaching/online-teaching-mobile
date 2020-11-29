@@ -6,7 +6,7 @@ import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:toast/toast.dart';
 
-int id = id != null ? id : 0;
+String id = id != null ? id : 0;
 
 class SummaryView extends SummaryViewModel {
   @override

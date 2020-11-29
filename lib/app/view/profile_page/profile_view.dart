@@ -38,6 +38,13 @@ class ProfileView extends ProfileViewModel {
                   bottomLeft: Radius.circular(36),
                   bottomRight: Radius.circular(36),
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    //offset: Offset(0, 1),
+                    blurRadius: 20,
+                    //  color: Colors.blue.withOpacity(0.23),
+                  ),
+                ],
               ),
             ),
             Positioned(

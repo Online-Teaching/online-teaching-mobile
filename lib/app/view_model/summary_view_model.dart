@@ -32,7 +32,7 @@ abstract class SummaryViewModel extends State<Summary> with BaseViewModel {
     });
   }
 
-  Future<void> getquiz(int id) async {
+  Future<void> getquiz(String id) async {
     try {
       quiz_for_current_category = await questionService.getQuestionList(id);
       quiz_control = true;

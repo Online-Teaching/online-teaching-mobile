@@ -16,11 +16,14 @@ class BookmarkView extends BookmarkViewModel {
   Expanded body() {
     return Expanded(
       flex: 11,
-      child: ListView.builder(
-          itemCount: categories.length,
-          scrollDirection: Axis.vertical,
-          itemBuilder: (context, index) =>
-              categoryCard(categories[index], index)),
+      child: Container(
+        margin: EdgeInsets.only(top: 5),
+        child: ListView.builder(
+            itemCount: categories.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) =>
+                categoryCard(categories[index], index)),
+      ),
     );
   }
 
@@ -38,30 +41,28 @@ class BookmarkView extends BookmarkViewModel {
     return Expanded(
       flex: 2,
       child: Container(
-        /// searchin altındaki margin
-        // It will cover 20% of our total height
-
-        child: Container(
-          alignment: Alignment.topCenter,
-          padding: EdgeInsets.only(
-            top: 30,
-            left: 20,
-            right: 20,
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.only(top: 30, left: 20, right: 20),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
           ),
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
+          boxShadow: [
+            BoxShadow(
+              //offset: Offset(0, 1),
+              blurRadius: 10,
+              //  color: Colors.blue.withOpacity(0.23),
             ),
-          ),
-          child: Text(
-            "Kaydettiklerim",
-            style: Theme.of(context)
-                .textTheme
-                .headline5
-                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+          ],
+        ),
+        child: Text(
+          "Kaydettiklerim",
+          style: Theme.of(context)
+              .textTheme
+              .headline5
+              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
