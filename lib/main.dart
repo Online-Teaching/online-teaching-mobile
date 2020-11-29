@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
+import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
 
+import 'app/view/bottom_navigation_page/bottom_navigation.dart';
 import 'app/view/splash_screen/splash_screen.dart';
 import 'core/init/navigation/navigation_service.dart';
 import 'core/init/navigation/navigation_route.dart';
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: Splash(),
+      home: BottomNavigation(),
       onGenerateRoute: NavigationRoute.instance.generateRoute,
       navigatorKey: NavigationService.instance.navigatorKey,
     );
