@@ -20,6 +20,7 @@ class CategoryNameService implements ICategoryNameService {
   Future<List<String>> getCategoriesNameList() async {
     API api = new API();
     final baseUrl = api.getOnlineTeaching_2_Url();
+
     var _response = await http.get("$baseUrl/kategori_name_list.json");
     var jsonData = json.decode(_response.body);
     //https://online-teaching2.firebaseio.com/kategori_name_list.json

@@ -50,15 +50,15 @@ class SplashView extends SplashViewModel {
               children: [
                 Text(
                   "Online Teaching",
-                  style: context.textTheme.headline4.copyWith(
-                      color: Colors.green, fontWeight: FontWeight.bold),
+                  style: context.textTheme.headline4
+                      .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 Lottie.asset('assets/lottie_json/student1.json'),
                 SizedBox(
                   width: context.width * 0.8,
                   height: context.height * 0.08,
                   child: FlatButton(
-                    color: Colors.green,
+                    color: Colors.red,
                     child: Text(
                       "Başla",
                       style: TextStyle(
@@ -69,7 +69,7 @@ class SplashView extends SplashViewModel {
                     ),
                     onPressed: () {
                       navigation.navigateToPage(
-                          path: NavigationConstants.CATEGORY_VIEW, data: 20);
+                          path: NavigationConstants.LOGIN, data: 20);
                     },
                   ),
                 )

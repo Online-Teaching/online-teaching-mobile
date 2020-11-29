@@ -1,4 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:online_teaching_mobile/app/model/quiz_model.dart';
+import 'package:online_teaching_mobile/app/service/interfaces/IQuestion.dart';
+import 'package:online_teaching_mobile/app/service/quiz_page_service.dart';
 import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
+import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 
-abstract class DetailViewModel extends State<Detail> {}
+abstract class DetailViewModel extends State<Detail> with BaseViewModel {
+  bool isLoading = false;
+  MyQuiz quiz_for_current_category;
+  IQuestionService questionService;
+
+  @override
+  void initState() {
+    super.initState();
+    questionService = QuizService.instance;
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  void changeLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  Future<void> getquiz() async {
+    quiz_for_current_category = await questionService.getQuestionList();
+    for (var item in quiz_for_current_category.questionList) {
+      print(item.question);
+      print("sorular geliyor amaaaaaaaaaaaa");
+    }
+    return quiz_for_current_category;
+  }
+}
+
+abstract class BaseViewModel {
+  NavigationService navigation = NavigationService.instance;
+}

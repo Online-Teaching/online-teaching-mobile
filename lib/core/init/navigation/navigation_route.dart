@@ -6,8 +6,10 @@ import 'package:online_teaching_mobile/app/view/category_page/category_page.dart
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
 import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
 import 'package:online_teaching_mobile/app/view/home_page/home.dart';
+import 'package:online_teaching_mobile/app/view/login_page/login.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
+import 'package:online_teaching_mobile/app/view/sub_category_page/sub_category.dart';
 import 'package:online_teaching_mobile/app/view/summary_page/summary.dart';
 import 'package:online_teaching_mobile/app/view/summary_page/summary_view.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
@@ -41,6 +43,12 @@ class NavigationRoute {
         break;
       case NavigationConstants.HOME:
         return normalNavigate(Home(), args.arguments);
+        break;
+      case NavigationConstants.SUB_CATEGORY:
+        return normalNavigate(SubCategory(), args.arguments);
+        break;
+      case NavigationConstants.LOGIN:
+        return normalNavigate(Login(), args.arguments);
         break;
       default:
         return MaterialPageRoute(

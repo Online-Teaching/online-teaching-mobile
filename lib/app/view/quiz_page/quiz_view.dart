@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/quiz_model.dart';
+import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
@@ -36,6 +37,7 @@ class QuizView extends QuizViewModel {
   @override
   Widget build(BuildContext context) {
     quiz = ModalRoute.of(context).settings.arguments;
+    api_sub_category_index = 0.toString();
     build_stapper();
     return WillPopScope(
         child: scaffoldWidget(context),
@@ -80,7 +82,7 @@ class QuizView extends QuizViewModel {
             ),
             onPressed: () {
               navigation.navigateToPage(
-                  path: NavigationConstants.CATEGORY_VIEW);
+                  path: NavigationConstants.BOTTOM_NAVIGATION);
             },
           ),
           title: Text(
@@ -108,7 +110,7 @@ class QuizView extends QuizViewModel {
                       onPressed: () {
                         complete = false;
                         navigation.navigateToPageClear(
-                            path: NavigationConstants.CATEGORY_VIEW);
+                            path: NavigationConstants.BOTTOM_NAVIGATION);
                       },
                     ),
                   ],
@@ -119,7 +121,7 @@ class QuizView extends QuizViewModel {
               child: Theme(
               data: ThemeData(
                   accentColor: Colors.red,
-                  primarySwatch: Colors.deepPurple, //stepper linki
+                  primarySwatch: Colors.red, //stepper rengi
                   colorScheme: ColorScheme.light(primary: Colors.orange)),
               child: Stepper(
                 steps: steps,

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view_model/detail_view_model.dart';
+import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class DetailView extends DetailViewModel {
   String metin = """
@@ -10,10 +13,12 @@ class DetailView extends DetailViewModel {
   Size size;
   @override
   Widget build(BuildContext context) {
+    getquiz();
+    final Category category = ModalRoute.of(context).settings.arguments;
     size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
-        children: [appbar(size, context), body()],
+        children: [appbar(size, context), body(category)],
       ),
     );
   }
@@ -53,32 +58,62 @@ class DetailView extends DetailViewModel {
     );
   }
 
-  Expanded body() {
+  Expanded body(Category category) {
     return Expanded(
       flex: 11,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(20),
-            height: size.height,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  //offset: Offset(0, 1),
-                  blurRadius: 20,
-                  //  color: Colors.blue.withOpacity(0.23),
+        child: Column(
+          children: [
+            Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(20),
+                height: size.height,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      //offset: Offset(0, 1),
+                      blurRadius: 20,
+                      //  color: Colors.blue.withOpacity(0.23),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Container(
-              child: Text(
-                metin,
-                style: TextStyle(fontSize: 20),
+                child: Container(
+                  child: SizedBox(
+                    width: size.width,
+                    child: Text(
+                      category.summary,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                )),
+            //button
+            SizedBox(
+              width: size.width,
+              height: size.height * 0.08,
+              child: FlatButton(
+                color: Colors.red,
+                child: Text(
+                  "Quiz çöz",
+                  style: TextStyle(color: Colors.white),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                onPressed: () {
+                  navigation.navigateToPageClear(
+                      path: NavigationConstants.QUIZ_VIEW,
+                      data: quiz_for_current_category);
+                },
               ),
-            )),
+            ),
+          ],
+        ),
       ),
     );
   }

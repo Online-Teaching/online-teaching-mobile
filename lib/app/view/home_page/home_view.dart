@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
+import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/home_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/future_builder.dart';
@@ -135,8 +136,12 @@ class HomeView extends HomeViewModel {
           /// seçilen dolsun gerisi boş
           onTap: () {
             setState(() {
+              api_category_url = "";
+              api_category_url = category;
+              print(api_category_url);
+              print("böyle son hali");
               _selectedIndex = index;
-              navigation.navigateToPage(path: NavigationConstants.DETAIL_VIEW);
+              navigation.navigateToPage(path: NavigationConstants.SUB_CATEGORY);
             });
           },
         ),

@@ -1,5 +1,5 @@
 class MyQuiz {
-  int id;
+  String id;
   List<Question> questionList;
 
   MyQuiz({this.id, this.questionList});
