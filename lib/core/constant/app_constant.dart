@@ -1,1 +1,1 @@
-
+double star;

@@ -23,7 +23,7 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
   List<Subject> subjects = [];
   ISubjecteService subjecteService;
 
-  /// sibgle category
+  /// single category
   ICategoryNameService categoryService;
   Category category;
 
@@ -50,7 +50,7 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
     });
   }
 
-  Future<void> getSubjects(List<String> mylist) async {
+  Future<void> getSubjects() async {
     subjects = await subjecteService.getSubjectList();
     for (var item in subjects) {
       print("view model subjects");

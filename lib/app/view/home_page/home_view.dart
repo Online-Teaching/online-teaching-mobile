@@ -123,7 +123,7 @@ class HomeView extends HomeViewModel {
   Container categoryCard(String category, int index) => Container(
           child: Card(
         child: ListTile(
-          title: Text(category.toString()),
+          title: Text(category.toUpperCase()),
           selected: index == _selectedIndex,
           /*    leading: IconButton(
             icon: icon,

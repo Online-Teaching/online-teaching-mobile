@@ -14,9 +14,6 @@ class SubCategoryView extends SubCategoryViewModel {
   @override
   void initState() {
     super.initState();
-    bookmark_data = [
-      "1",
-    ];
     getLocalData();
   }
 
@@ -27,7 +24,6 @@ class SubCategoryView extends SubCategoryViewModel {
     preferences.setStringList("konuid", bookmark_data);
 
     print("//shared preferences");
-    print(bookmark_data);
   }
 
   isBookmark(String id) {
@@ -83,25 +79,28 @@ class SubCategoryView extends SubCategoryViewModel {
                 : Icon(Icons.bookmark_border),
             onPressed: () {
               setState(() {
-                if (bookmark_data == null) {
-                  //set işlemi
-                  print(bookmark_data);
-                  bookmark_data.add("0");
-                  preferences.setStringList("konuid", bookmark_data);
-                } else if (bookmark_data.contains(category.id)) {
-                  bookmark_data.remove(category.id);
-                  preferences.setStringList("konuid", bookmark_data);
-                } else if (!bookmark_data.contains(category.id)) {
-                  bookmark_data.add(category.id);
-                  preferences.setStringList("konuid", bookmark_data);
-                }
-                print(bookmark_data);
+                bookmark_data = preferences.getStringList("konuid");
 
-                /// her basıldığında set state yapmalı
+                try {
+                  if (bookmark_data.contains(category.id)) {
+                    bookmark_data.remove(category.id);
+                  } else {
+                    bookmark_data.add(category.id);
+                  }
+                } catch (e) {
+                  preferences.setStringList("konuid", [""]);
+                  bookmark_data = preferences.getStringList("konuid");
+                  bookmark_data.add(category.id);
+                }
+
+                preferences.setStringList("konuid", bookmark_data);
               });
+              print("bookmark listem : " + bookmark_data.toString());
+
+              /// her basıldığında set state yapmalı
             },
           ),
-          title: Text(category.title.toString()),
+          title: Text(category.title.toUpperCase()),
           onTap: () {
             setState(() {
               api_sub_category_index = index.toString();

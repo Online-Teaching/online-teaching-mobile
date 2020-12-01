@@ -38,7 +38,7 @@ class BookmarkView extends BookmarkViewModel {
       child: Container(
         margin: EdgeInsets.only(top: 5),
         child: FutureBuilder(
-            future: getSubjects(myBookMarkList),
+            future: getSubjects(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               return ListView.builder(
                   itemCount: mySubjectList_service.length,
@@ -62,7 +62,7 @@ class BookmarkView extends BookmarkViewModel {
               });
             },
           ),
-          title: Text(subject.title.toString()),
+          title: Text(subject.title.toUpperCase()),
           onTap: () {
             create_Url(subject.id, context);
             navigation.navigateToPage(path: NavigationConstants.DETAIL_VIEW);
