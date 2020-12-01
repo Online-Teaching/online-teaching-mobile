@@ -71,47 +71,60 @@ class SubCategoryView extends SubCategoryViewModel {
     int index,
   ) =>
       Container(
-          child: Card(
-        child: ListTile(
-          leading: IconButton(
-            icon: isBookmark(category.id)
-                ? Icon(Icons.bookmark)
-                : Icon(Icons.bookmark_border),
-            onPressed: () {
-              setState(() {
-                bookmark_data = preferences.getStringList("konuid");
-
-                try {
-                  if (bookmark_data.contains(category.id)) {
-                    bookmark_data.remove(category.id);
-                  } else {
-                    bookmark_data.add(category.id);
-                  }
-                } catch (e) {
-                  preferences.setStringList("konuid", [""]);
-                  bookmark_data = preferences.getStringList("konuid");
-                  bookmark_data.add(category.id);
-                }
-
-                preferences.setStringList("konuid", bookmark_data);
-              });
-              print("bookmark listem : " + bookmark_data.toString());
-
-              /// her basıldığında set state yapmalı
-            },
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey[100],
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
           ),
-          title: Text(category.title.toUpperCase()),
-          onTap: () {
-            setState(() {
-              api_sub_category_index = index.toString();
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: ListTile(
+              leading: IconButton(
+                icon: isBookmark(category.id)
+                    ? Icon(Icons.bookmark)
+                    : Icon(Icons.bookmark_border),
+                onPressed: () {
+                  setState(() {
+                    bookmark_data = preferences.getStringList("konuid");
 
-              /// go to detail view
-              navigation.navigateToPage(
-                  path: NavigationConstants.DETAIL_VIEW, data: category);
-            });
-          },
-        ),
-      ));
+                    try {
+                      if (bookmark_data.contains(category.id)) {
+                        bookmark_data.remove(category.id);
+                      } else {
+                        bookmark_data.add(category.id);
+                      }
+                    } catch (e) {
+                      preferences.setStringList("konuid", [""]);
+                      bookmark_data = preferences.getStringList("konuid");
+                      bookmark_data.add(category.id);
+                    }
+
+                    preferences.setStringList("konuid", bookmark_data);
+                  });
+                  print("dataaa" + bookmark_data.toString());
+
+                  /// her basıldığında set state yapmalı
+                },
+              ),
+              title: Text(category.title.toUpperCase()),
+              onTap: () {
+                setState(() {
+                  api_sub_category_index = index.toString();
+
+                  /// go to detail view
+                  navigation.navigateToPage(
+                      path: NavigationConstants.DETAIL_VIEW, data: category);
+                });
+              },
+            ),
+          ));
 
   Expanded appbar(Size size, BuildContext context) {
     return Expanded(

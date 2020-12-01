@@ -32,13 +32,15 @@ class HomeView extends HomeViewModel {
           margin: EdgeInsets.only(top: 5),
           child: FutureBuilder(
               future: getList2(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return ListView.builder(
-                    itemCount: categories_name.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) =>
-                        categoryCard(categories_name[index], index));
-              }),
+              builder: getList2() == null
+                  ? Center(child: CircularProgressIndicator())
+                  : (BuildContext context, AsyncSnapshot snapshot) {
+                      return ListView.builder(
+                          itemCount: categories_name.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) =>
+                              categoryCard(categories_name[index], index));
+                    }),
         ));
   }
 
@@ -121,19 +123,36 @@ class HomeView extends HomeViewModel {
   }
 
   Container categoryCard(String category, int index) => Container(
-          child: Card(
-        child: ListTile(
-          title: Text(category.toUpperCase()),
-          selected: index == _selectedIndex,
-          /*    leading: IconButton(
-            icon: icon,
-            onPressed: () {
-              icon = Icon(Icons.bookmark);
-            },
+      height: 80,
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+        boxShadow: [
+          BoxShadow(
+            //offset: Offset(0, 1),
+            blurRadius: 7,
+            color: Colors.blueGrey.withOpacity(0.25),
           ),
-          */
-
-          /// seçilen dolsun gerisi boş
+        ],
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        color: Colors.red[100],
+        child: ListTile(
+          title: Center(
+              child: Text(
+            category.toUpperCase(),
+            style:
+                TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+          )),
           onTap: () {
             setState(() {
               api_category_url = "";

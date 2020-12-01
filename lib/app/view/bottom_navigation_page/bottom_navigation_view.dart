@@ -16,7 +16,7 @@ class BottomNavigationView extends BottomNavigationViewModel {
       body: tabs[_currentindex],
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: false,
-        selectedItemColor: Colors.orange,
+        selectedItemColor: Colors.red,
         iconSize: 30,
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentindex,

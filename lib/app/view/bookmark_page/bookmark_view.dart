@@ -51,7 +51,20 @@ class BookmarkView extends BookmarkViewModel {
   }
 
   Container categoryCard(Subject subject, int index) => Container(
-          child: Card(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey[100],
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: ListTile(
           leading: IconButton(
             icon: Icon(Icons.bookmark),

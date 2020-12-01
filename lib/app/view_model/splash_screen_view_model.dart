@@ -35,7 +35,7 @@ abstract class SplashViewModel extends State<Splash> with BaseViewModel {
     }
     ort = sum / (myQuizNoteList.length - 1);
 
-    star = (ort / 10);
+    star = (ort / 20);
     print("taaaarrrr" + star.toString());
 
     return ort;
