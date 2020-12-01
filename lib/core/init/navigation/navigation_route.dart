@@ -8,6 +8,7 @@ import 'package:online_teaching_mobile/app/view/category_page/category_page_view
 import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
 import 'package:online_teaching_mobile/app/view/home_page/home.dart';
 import 'package:online_teaching_mobile/app/view/login_page/login.dart';
+import 'package:online_teaching_mobile/app/view/profile_page/profile.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
 import 'package:online_teaching_mobile/app/view/sub_category_page/sub_category.dart';
@@ -53,6 +54,9 @@ class NavigationRoute {
         break;
       case NavigationConstants.BOOKMARK:
         return normalNavigate(Bookmark(), args.arguments);
+        break;
+      case NavigationConstants.PROFILE:
+        return normalNavigate(Profile(), args.arguments);
         break;
       default:
         return MaterialPageRoute(

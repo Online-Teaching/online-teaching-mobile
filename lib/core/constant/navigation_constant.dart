@@ -9,4 +9,5 @@ class NavigationConstants {
   static const SUB_CATEGORY = "/sub_category";
   static const LOGIN = "/login";
   static const BOOKMARK = "/bookmark";
+  static const PROFILE = "/profile";
 }
