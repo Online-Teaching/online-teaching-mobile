@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
+import 'package:online_teaching_mobile/app/view/bookmark_page/bookmark.dart';
 import 'package:online_teaching_mobile/app/view/bottom_navigation_page/bottom_navigation.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page.dart';
 import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
@@ -49,6 +50,9 @@ class NavigationRoute {
         break;
       case NavigationConstants.LOGIN:
         return normalNavigate(Login(), args.arguments);
+        break;
+      case NavigationConstants.BOOKMARK:
+        return normalNavigate(Bookmark(), args.arguments);
         break;
       default:
         return MaterialPageRoute(

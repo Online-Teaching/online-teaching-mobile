@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
+import 'package:online_teaching_mobile/app/model/category_model.dart';
+import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategoryName.dart';
 
 import 'api/API.dart';
@@ -14,6 +17,7 @@ class CategoryNameService implements ICategoryNameService {
     return _instance;
   }
 
+  Category single_category;
   CategoryNameService._init();
 
   @override
@@ -39,5 +43,19 @@ class CategoryNameService implements ICategoryNameService {
     }
 
     return categories_name;
+  }
+
+  @override
+  Future<Category> getSingleCategory() async {
+    API api = new API();
+    final baseUrl = api.getOnlineTeaching_2_Url();
+
+    var _response = await http.get(
+        "$baseUrl/kategoriler/$api_category_url/$api_sub_category_index.json");
+    var jsonData = json.decode(_response.body);
+    single_category = Category.fromJson(jsonData);
+    //  https://online-teaching2.firebaseio.com/kategoriler/kimya/0.json
+
+    return single_category;
   }
 }

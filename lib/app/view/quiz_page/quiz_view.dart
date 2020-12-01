@@ -10,7 +10,6 @@ import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class QuizView extends QuizViewModel {
-  MyQuiz quiz;
   //radiobutton
   int selectedRadioTile;
   int correct_answer = 0;
@@ -36,9 +35,6 @@ class QuizView extends QuizViewModel {
 
   @override
   Widget build(BuildContext context) {
-    quiz = ModalRoute.of(context).settings.arguments;
-    api_sub_category_index = 0.toString();
-    build_stapper();
     return WillPopScope(
         child: scaffoldWidget(context),
         onWillPop: () {
@@ -123,7 +119,43 @@ class QuizView extends QuizViewModel {
                   accentColor: Colors.red,
                   primarySwatch: Colors.red, //stepper rengi
                   colorScheme: ColorScheme.light(primary: Colors.orange)),
-              child: Stepper(
+              child: FutureBuilder(
+                  future: getquiz(),
+                  builder: getquiz() != null
+                      ? (BuildContext context, AsyncSnapshot snapshot) {
+                          if (!snapshot.hasData) {
+                            return Center(child: CircularProgressIndicator());
+                          } //CIRCULAR INDICATOR
+                          else {
+                            build_stapper();
+                            return Stepper(
+                              steps: steps,
+                              type: stepperType,
+                              currentStep: currentStep,
+                              onStepTapped: (step) =>
+                                  setState(() => currentStep = step),
+                              onStepContinue: true
+                                  ? () => setState(() {
+                                        print(
+                                            "heyyyyy nuuuuuuuuuuulllllllllllll");
+
+                                        calculate_points(currentStep);
+                                        if (currentStep != 9)
+                                          ++currentStep;
+                                        else if (currentStep == 9) {
+                                          print("test bitti başka sayfaya geç");
+                                          complete = true;
+                                        }
+                                      })
+                                  : null,
+                            );
+                          }
+                        }
+                      : (BuildContext context, AsyncSnapshot snapshot) {
+                          return Center(child: CircularProgressIndicator());
+                        }),
+
+              /*Stepper(
                 steps: steps,
                 type: stepperType,
                 currentStep: currentStep,
@@ -142,20 +174,21 @@ class QuizView extends QuizViewModel {
                         })
                     : null,
               ),
+              */
             )),
     ]);
   }
 
   void calculate_points(int index) {
-    if (quiz.questionList[index].correct == selectedRadioTile) {
+    if (myquiz.questionList[index].correct == selectedRadioTile) {
       correct_answer++;
-      print(quiz.questionList[index].correct.toString() +
+      print(myquiz.questionList[index].correct.toString() +
           "            " +
           selectedRadioTile.toString());
       print(correct_answer);
     } else {
       wrong_answer++;
-      print(quiz.questionList[index].correct.toString() +
+      print(myquiz.questionList[index].correct.toString() +
           "            " +
           selectedRadioTile.toString());
       print(wrong_answer);
@@ -187,14 +220,14 @@ class QuizView extends QuizViewModel {
           child: Column(
             children: [
               Text(
-                quiz.questionList[i].question,
+                myquiz.questionList[i].question,
                 style:
                     context.textTheme.bodyText1.copyWith(color: Colors.black),
               ),
-              eachRadioButton(quiz.questionList[i].answer1, 1),
-              eachRadioButton(quiz.questionList[i].answer2, 2),
-              eachRadioButton(quiz.questionList[i].answer3, 3),
-              eachRadioButton(quiz.questionList[i].answer4, 4),
+              eachRadioButton(myquiz.questionList[i].answer1, 1),
+              eachRadioButton(myquiz.questionList[i].answer2, 2),
+              eachRadioButton(myquiz.questionList[i].answer3, 3),
+              eachRadioButton(myquiz.questionList[i].answer4, 4),
             ],
           ),
         )

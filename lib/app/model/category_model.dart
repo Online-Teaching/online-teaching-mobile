@@ -2,7 +2,6 @@ class Category {
   String id;
   String title;
   String summary;
-  int isBookmark;
 
   Category({this.id, this.title});
 
@@ -10,7 +9,6 @@ class Category {
     id = json['id'];
     title = json['title'];
     summary = json['summary'];
-    isBookmark = json['isBookmark'];
   }
 
   Map<String, dynamic> toJson() {
@@ -18,7 +16,6 @@ class Category {
     data['id'] = this.id;
     data['title'] = this.title;
     data['summary'] = this.summary;
-    data['isBookmark'] = this.isBookmark;
     return data;
   }
 
@@ -27,7 +24,6 @@ class Category {
       'id': id,
       'title': title,
       'summary': summary,
-      'isBookmark': isBookmark
     };
   }
 }

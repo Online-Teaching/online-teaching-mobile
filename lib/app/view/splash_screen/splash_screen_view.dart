@@ -6,6 +6,8 @@ import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
+List<String> isBookmarkList = [""];
+
 class SplashView extends SplashViewModel {
   @override
   Widget build(BuildContext context) {
@@ -69,7 +71,7 @@ class SplashView extends SplashViewModel {
                     ),
                     onPressed: () {
                       navigation.navigateToPage(
-                          path: NavigationConstants.LOGIN, data: 20);
+                          path: NavigationConstants.LOGIN);
                     },
                   ),
                 )

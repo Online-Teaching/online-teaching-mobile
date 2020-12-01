@@ -1,10 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
+import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen_view.dart';
 import 'package:online_teaching_mobile/app/view_model/sub_category_view_model.dart';
+import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SubCategoryView extends SubCategoryViewModel {
+  /// genel değişmez bir liste olmalı shared preferences
+  SharedPreferences preferences;
+  List<String> bookmark_data = [];
+  @override
+  void initState() {
+    super.initState();
+    bookmark_data = [
+      "1",
+    ];
+    getLocalData();
+  }
+
+  Future getLocalData() async {
+    preferences = await SharedPreferences.getInstance();
+
+    bookmark_data = preferences.getStringList("konuid");
+    preferences.setStringList("konuid", bookmark_data);
+
+    print("//shared preferences");
+    print(bookmark_data);
+  }
+
+  isBookmark(String id) {
+    if (bookmark_data == null) {
+      return false;
+    } else if (bookmark_data.contains(id)) {
+      return true;
+    } else if (!bookmark_data.contains(id)) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     print("//// sub category"); // mat kim gibi
@@ -43,16 +78,24 @@ class SubCategoryView extends SubCategoryViewModel {
           child: Card(
         child: ListTile(
           leading: IconButton(
-            icon: category.isBookmark == 1
+            icon: isBookmark(category.id)
                 ? Icon(Icons.bookmark)
                 : Icon(Icons.bookmark_border),
             onPressed: () {
               setState(() {
-                if (category.isBookmark == 0) {
-                  category.isBookmark = 1;
-                } else if (category.isBookmark == 1) {
-                  category.isBookmark = 0;
+                if (bookmark_data == null) {
+                  //set işlemi
+                  print(bookmark_data);
+                  bookmark_data.add("0");
+                  preferences.setStringList("konuid", bookmark_data);
+                } else if (bookmark_data.contains(category.id)) {
+                  bookmark_data.remove(category.id);
+                  preferences.setStringList("konuid", bookmark_data);
+                } else if (!bookmark_data.contains(category.id)) {
+                  bookmark_data.add(category.id);
+                  preferences.setStringList("konuid", bookmark_data);
                 }
+                print(bookmark_data);
 
                 /// her basıldığında set state yapmalı
               });

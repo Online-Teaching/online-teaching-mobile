@@ -8,4 +8,5 @@ class NavigationConstants {
   static const HOME = "/home";
   static const SUB_CATEGORY = "/sub_category";
   static const LOGIN = "/login";
+  static const BOOKMARK = "/bookmark";
 }

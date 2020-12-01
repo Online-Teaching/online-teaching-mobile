@@ -3,6 +3,9 @@ import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view_model/detail_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:toast/toast.dart';
+
+//Category category = new Category();
 
 class DetailView extends DetailViewModel {
   String metin = """
@@ -13,12 +16,11 @@ class DetailView extends DetailViewModel {
   Size size;
   @override
   Widget build(BuildContext context) {
-    getquiz();
-    final Category category = ModalRoute.of(context).settings.arguments;
+    // category = ModalRoute.of(context).settings.arguments;
     size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
-        children: [appbar(size, context), body(category)],
+        children: [appbar(size, context), body()],
       ),
     );
   }
@@ -58,7 +60,7 @@ class DetailView extends DetailViewModel {
     );
   }
 
-  Expanded body(Category category) {
+  Expanded body() {
     return Expanded(
       flex: 11,
       child: SingleChildScrollView(
@@ -83,10 +85,26 @@ class DetailView extends DetailViewModel {
                 child: Container(
                   child: SizedBox(
                     width: size.width,
-                    child: Text(
-                      category.summary,
-                      style: TextStyle(fontSize: 20),
-                    ),
+                    child: FutureBuilder(
+                        future: getSingleCategory(),
+                        builder: getSingleCategory() != null
+                            ? (BuildContext context, AsyncSnapshot snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                } //CIRCULAR INDICATOR
+                                else {
+                                  print("hello");
+                                  print(category.summary);
+                                  return Text(category.summary != null
+                                      ? category.summary
+                                      : "default");
+                                }
+                              }
+                            : (BuildContext context, AsyncSnapshot snapshot) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }),
                   ),
                 )),
             //button
@@ -107,8 +125,7 @@ class DetailView extends DetailViewModel {
                 ),
                 onPressed: () {
                   navigation.navigateToPageClear(
-                      path: NavigationConstants.QUIZ_VIEW,
-                      data: quiz_for_current_category);
+                      path: NavigationConstants.QUIZ_VIEW);
                 },
               ),
             ),
@@ -116,5 +133,9 @@ class DetailView extends DetailViewModel {
         ),
       ),
     );
+  }
+
+  hello() {
+    return category.summary;
   }
 }

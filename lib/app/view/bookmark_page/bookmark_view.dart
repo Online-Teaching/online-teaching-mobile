@@ -1,8 +1,27 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
+import 'package:online_teaching_mobile/app/model/category_model.dart';
+import 'package:online_teaching_mobile/app/model/subject_model.dart';
+import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/bookmark_view_model.dart';
+import 'package:online_teaching_mobile/core/constant/app_constant.dart';
+import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 class BookmarkView extends BookmarkViewModel {
-  List<int> categories = [9, 2, 3, 4, 5, 6, 7, 8, 3, 4, 5, 6, 3, 4, 5, 3];
+  SharedPreferences preferences;
+  List<String> myBookMarkList = [];
+  List<Subject> mySubjectList = [];
+  BookMarkSubCategory g_category;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -18,21 +37,35 @@ class BookmarkView extends BookmarkViewModel {
       flex: 11,
       child: Container(
         margin: EdgeInsets.only(top: 5),
-        child: ListView.builder(
-            itemCount: categories.length,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) =>
-                categoryCard(categories[index], index)),
+        child: FutureBuilder(
+            future: getSubjects(myBookMarkList),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              return ListView.builder(
+                  itemCount: mySubjectList_service.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) =>
+                      categoryCard(mySubjectList_service[index], index));
+            }),
       ),
     );
   }
 
-  Container categoryCard(int category, int index) => Container(
+  Container categoryCard(Subject subject, int index) => Container(
           child: Card(
         child: ListTile(
-          title: Text(category.toString()),
+          leading: IconButton(
+            icon: Icon(Icons.bookmark),
+            onPressed: () {
+              setState(() {
+                myBookMarkList.remove(subject.id);
+                preferences.setStringList("konuid", myBookMarkList);
+              });
+            },
+          ),
+          title: Text(subject.title.toString()),
           onTap: () {
-            setState(() {});
+            create_Url(subject.id, context);
+            navigation.navigateToPage(path: NavigationConstants.DETAIL_VIEW);
           },
         ),
       ));
@@ -66,5 +99,33 @@ class BookmarkView extends BookmarkViewModel {
         ),
       ),
     );
+  }
+
+  void create_Url(String id, context) {
+    String category_url = "";
+    String sub_category_url = "";
+    id.runes.forEach((int rune) {
+      if (isIntNumber(String.fromCharCode(rune))) {
+        sub_category_url += String.fromCharCode(rune);
+      } else {
+        category_url += String.fromCharCode(rune);
+      }
+    });
+
+    api_category_url = category_url;
+    api_sub_category_index = sub_category_url;
+    getSingleCategory();
+
+    Toast.show(api_category_url + " ve " + api_sub_category_index, context,
+        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+  }
+}
+
+isIntNumber(String char) {
+  List<String> numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  if (numberList.contains(char)) {
+    return true;
+  } else {
+    return false;
   }
 }

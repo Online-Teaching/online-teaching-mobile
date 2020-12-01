@@ -27,6 +27,8 @@ class QuizService implements IQuestionService {
           .get("$baseUrl/quiz/$api_category_url$api_sub_category_index.json");
       var jsonData = json.decode(_response.body);
       quiz_data = MyQuiz.fromJson(jsonData);
+      print("quiz çekme başarılı");
+      print(quiz_data.questionList[0].answer4);
       return quiz_data;
     } on Exception catch (_) {}
   }
