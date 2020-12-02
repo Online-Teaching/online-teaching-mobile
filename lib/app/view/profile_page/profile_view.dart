@@ -22,14 +22,12 @@ class ProfileView extends ProfileViewModel {
 
   @override
   Widget build(BuildContext context) {
-    getaverage_setstate() {
-      setState(() {});
+    if (isExistQuiz == 2) {
+      print("quiz varrrr");
     }
-
-    hello() {
-      print("/// profile pagedeki quiz notlar" + quizNote.toString());
-      print("/// profile pagedeki quiz idler" + quizid.toString());
-    }
+    print("starın son hali" + star.toString());
+    print("myort son hali" + myort.toString());
+    print("note son hali" + myQuizNoteList.toString());
 
     /////
 
@@ -136,42 +134,70 @@ class ProfileView extends ProfileViewModel {
                       width: 10,
                     ),
                     FutureBuilder(
-                      future: getAverage(),
-                      builder: getAverage() == null
-                          ? (context, snapshot) {
-                              return Text('-');
-                            }
-                          : (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return Text(star.toStringAsFixed(2),
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold));
-                              } else {
-                                return Text('-');
-                              }
-                            },
-                    ),
+                        future: getAverage(),
+                        builder:
+                            (BuildContext context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            return Text(star.toStringAsFixed(2),
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold));
+                          } else {
+                            getAverage();
+                            return Center(child: CircularProgressIndicator());
+                          }
+                        }),
                   ],
                 )),
             Expanded(
               flex: 10,
               child: Container(
-                //color: Colors.amber,
-                child: FutureBuilder(
-                    future: getSubjects(),
-                    builder: getSubjects() == null
-                        ? Center(child: CircularProgressIndicator())
-                        : (BuildContext context, AsyncSnapshot snapshot) {
-                            return ListView.builder(
-                                itemCount: mySubjectList_service.length,
-                                scrollDirection: Axis.vertical,
-                                itemBuilder: (context, index) => testCard(
-                                    mySubjectList_service.reversed
-                                        .toList()[index],
-                                    index));
-                          }),
-              ),
+                  //color: Colors.amber,
+                  child: FutureBuilder(
+                future: getSubjects(),
+                builder: (getSubjects() == null
+                    ? Center(child: CircularProgressIndicator())
+                    : (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                              itemCount: mySubjectList_service.length,
+                              scrollDirection: Axis.vertical,
+                              itemBuilder: (context, index) => testCard(
+                                  mySubjectList_service.reversed
+                                      .toList()[index],
+                                  index));
+                        } else {
+                          return Container(
+                            margin: EdgeInsets.symmetric(horizontal: 50),
+                            child: Center(
+                                child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Quiz Yok",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 27,
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  "Henüz gösterilecek bir Quiz sonucun yok.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            )),
+                          );
+                        }
+                      }),
+              )),
             ),
           ],
         ),

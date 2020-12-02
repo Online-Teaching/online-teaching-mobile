@@ -55,13 +55,50 @@ class SubCategoryView extends SubCategoryViewModel {
         margin: EdgeInsets.only(top: 5),
         child: FutureBuilder(
             future: getList(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              return ListView.builder(
-                  itemCount: categories.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) =>
-                      categoryCard(categories[index], index));
-            }),
+            builder: getList() == null
+                ? Center(
+                    child: Text("konu yok"),
+                  )
+                : (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: categories.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) =>
+                              categoryCard(categories[index], index));
+                    } else {
+                      return Scaffold(
+                          body: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 50),
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Konu Yok",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "Bu kategoride konu bulunmuyor",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )),
+                      ));
+                    }
+                  }),
       ),
     );
   }
@@ -147,7 +184,7 @@ class SubCategoryView extends SubCategoryViewModel {
           ],
         ),
         child: Text(
-          "Alt kategoriler",
+          "Konular",
           style: Theme.of(context)
               .textTheme
               .headline5

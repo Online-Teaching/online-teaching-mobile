@@ -51,22 +51,24 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
   }
 
   Future<void> getSubjects() async {
-    subjects = await subjecteService.getSubjectList();
-    for (var item in subjects) {
-      print("view model subjects");
-      print(item.title);
-    }
-    mySubjectList_service = [];
-    preferences = await SharedPreferences.getInstance();
-    myBookMarkList = preferences.getStringList("konuid");
-    for (var item in subjects) {
-      if (myBookMarkList.contains(item.id)) {
-        if (!mySubjectList_service.contains(item)) {
-          mySubjectList_service.add(item);
+    try {
+      subjects = await subjecteService.getSubjectList();
+      for (var item in subjects) {
+        print("view model subjects");
+        print(item.title);
+      }
+      mySubjectList_service = [];
+      preferences = await SharedPreferences.getInstance();
+      myBookMarkList = preferences.getStringList("konuid");
+      for (var item in subjects) {
+        if (myBookMarkList.contains(item.id)) {
+          if (!mySubjectList_service.contains(item)) {
+            mySubjectList_service.add(item);
+          }
         }
       }
-    }
-    return mySubjectList_service;
+      return mySubjectList_service;
+    } catch (e) {}
   }
 
   Future<void> getSingleCategory() async {

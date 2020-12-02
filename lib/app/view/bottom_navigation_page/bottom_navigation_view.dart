@@ -10,13 +10,17 @@ class BottomNavigationView extends BottomNavigationViewModel {
 
   @override
   Widget build(BuildContext context) {
+    getQuizIdandQuizNote();
+    print("bottom navigation çalıştı");
     List<String> sss = b_categories_name;
     final tabs = [Bookmark(), Home(), Profile()];
     return Scaffold(
       body: tabs[_currentindex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.red,
         showUnselectedLabels: false,
-        selectedItemColor: Colors.red,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black38,
         iconSize: 30,
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentindex,

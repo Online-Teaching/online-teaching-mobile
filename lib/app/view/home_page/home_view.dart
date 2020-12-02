@@ -99,7 +99,7 @@ class HomeView extends HomeViewModel {
                       decoration: InputDecoration(
                         hintText: "Search",
                         hintStyle: TextStyle(
-                          color: Colors.green.withOpacity(0.5),
+                          color: Colors.black.withOpacity(0.5),
                         ),
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
@@ -135,6 +135,7 @@ class HomeView extends HomeViewModel {
         ),
         boxShadow: [
           BoxShadow(
+            spreadRadius: 1,
             //offset: Offset(0, 1),
             blurRadius: 7,
             color: Colors.blueGrey.withOpacity(0.25),
@@ -145,7 +146,7 @@ class HomeView extends HomeViewModel {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
         ),
-        color: Colors.red[100],
+        color: Colors.red[200],
         child: ListTile(
           title: Center(
               child: Text(

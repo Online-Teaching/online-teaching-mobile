@@ -26,19 +26,20 @@ abstract class SplashViewModel extends State<Splash> with BaseViewModel {
   }
 
   Future<void> getQuizIdandQuizNote() async {
-    preferences = await SharedPreferences.getInstance();
-    myQuizNoteList = preferences.getStringList("quizNote");
-    int sum = 0;
-    int i = 0;
-    for (i = 1; i < myQuizNoteList.length; i++) {
-      sum += int.parse(myQuizNoteList[i]);
+    try {
+      preferences = await SharedPreferences.getInstance();
+      myQuizNoteList = preferences.getStringList("quizNote");
+      int sum = 0;
+      int i = 0;
+      for (i = 1; i < myQuizNoteList.length; i++) {
+        sum += int.parse(myQuizNoteList[i]);
+      }
+      ort = sum / (myQuizNoteList.length - 1);
+
+      return ort;
+    } catch (e) {
+      ort = 0;
     }
-    ort = sum / (myQuizNoteList.length - 1);
-
-    star = (ort / 20);
-    print("taaaarrrr" + star.toString());
-
-    return ort;
   }
 }
 

@@ -143,9 +143,9 @@ class QuizView extends QuizViewModel {
                   builder: getquiz() != null
                       ? (BuildContext context, AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
-                          } //CIRCULAR INDICATOR
-                          else {
+                            return Center(
+                                child: Text("Bu konunun Quizi bulunmuyor."));
+                          } else {
                             build_stapper();
                             return Stepper(
                               steps: steps,

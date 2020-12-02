@@ -6,13 +6,15 @@ import 'package:online_teaching_mobile/app/view/profile_page/profile.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
   SharedPreferences preferences;
   List<String> myQuizIdList = [];
   List<String> myQuizNoteList = [];
   List<Subject> mySubjectList_service = [];
-  double myAverage;
+  double myort;
+  int isExistQuiz;
 
 /////
   bool isLoading = false;
@@ -42,36 +44,54 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
   }
 
   Future<void> getSubjects() async {
-    subjects = await subjecteService.getSubjectList();
+    try {
+      subjects = await subjecteService.getSubjectList();
 
-    mySubjectList_service = [];
-    preferences = await SharedPreferences.getInstance();
-    myQuizIdList = preferences.getStringList("quizid");
-    myQuizNoteList = preferences.getStringList("quizNote");
-    for (var item in subjects) {
-      if (myQuizIdList.contains(item.id)) {
-        if (!mySubjectList_service.contains(item)) {
-          mySubjectList_service.add(item);
+      mySubjectList_service = [];
+      preferences = await SharedPreferences.getInstance();
+      myQuizIdList = preferences.getStringList("quizid");
+
+      for (var item in subjects) {
+        if (myQuizIdList.contains(item.id)) {
+          if (!mySubjectList_service.contains(item)) {
+            mySubjectList_service.add(item);
+          }
         }
       }
+      for (var item in mySubjectList_service) {
+        print("??????????????????????*" + item.title);
+      }
+      return mySubjectList_service;
+    } catch (e) {
+      print("some error///" + e.toString());
     }
-    for (var item in mySubjectList_service) {
-      print("??????????????????????*" + item.title);
-    }
-    return mySubjectList_service;
   }
 
   Future<void> getAverage() async {
-    print(myQuizIdList.length.toString() + "  quiz id uzunluk");
-    print(myQuizNoteList.length.toString() + "  quiz note uzunluk");
-    int sum = 0;
-    int i = 0;
-    for (i = 1; i < myQuizNoteList.length; i++) {
-      sum += int.parse(myQuizNoteList[i]);
-    }
-    myAverage = sum / (myQuizNoteList.length - 1);
+    try {
+      preferences = await SharedPreferences.getInstance();
+      myQuizNoteList = preferences.getStringList("quizNote");
 
-    return myAverage;
+      int sum = 0;
+      int i = 0;
+      for (i = 1; i < myQuizNoteList.length; i++) {
+        sum += int.parse(myQuizNoteList[i]);
+      }
+      if (myQuizIdList.length == 0) {
+        print("is Exist quiz? " + myQuizIdList.length.toString());
+        isExistQuiz = 0;
+      } else if (myQuizIdList.length >= 1) {
+        print("is Exist quiz? " + myQuizIdList.length.toString());
+        isExistQuiz = 1;
+      }
+
+      star = myort;
+      myort = sum / (myQuizNoteList.length - 1);
+
+      return 23;
+    } catch (e) {
+      return 0;
+    }
   }
 }
 
