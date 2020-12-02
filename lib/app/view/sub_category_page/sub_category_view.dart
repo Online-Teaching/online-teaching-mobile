@@ -14,9 +14,6 @@ class SubCategoryView extends SubCategoryViewModel {
   @override
   void initState() {
     super.initState();
-    bookmark_data = [
-      "1",
-    ];
     getLocalData();
   }
 
@@ -27,7 +24,6 @@ class SubCategoryView extends SubCategoryViewModel {
     preferences.setStringList("konuid", bookmark_data);
 
     print("//shared preferences");
-    print(bookmark_data);
   }
 
   isBookmark(String id) {
@@ -59,13 +55,50 @@ class SubCategoryView extends SubCategoryViewModel {
         margin: EdgeInsets.only(top: 5),
         child: FutureBuilder(
             future: getList(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              return ListView.builder(
-                  itemCount: categories.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) =>
-                      categoryCard(categories[index], index));
-            }),
+            builder: getList() == null
+                ? Center(
+                    child: Text("konu yok"),
+                  )
+                : (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          itemCount: categories.length,
+                          scrollDirection: Axis.vertical,
+                          itemBuilder: (context, index) =>
+                              categoryCard(categories[index], index));
+                    } else {
+                      return Scaffold(
+                          body: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 50),
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Konu Yok",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "Bu kategoride konu bulunmuyor",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 17,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        )),
+                      ));
+                    }
+                  }),
       ),
     );
   }
@@ -75,44 +108,60 @@ class SubCategoryView extends SubCategoryViewModel {
     int index,
   ) =>
       Container(
-          child: Card(
-        child: ListTile(
-          leading: IconButton(
-            icon: isBookmark(category.id)
-                ? Icon(Icons.bookmark)
-                : Icon(Icons.bookmark_border),
-            onPressed: () {
-              setState(() {
-                if (bookmark_data == null) {
-                  //set işlemi
-                  print(bookmark_data);
-                  bookmark_data.add("0");
-                  preferences.setStringList("konuid", bookmark_data);
-                } else if (bookmark_data.contains(category.id)) {
-                  bookmark_data.remove(category.id);
-                  preferences.setStringList("konuid", bookmark_data);
-                } else if (!bookmark_data.contains(category.id)) {
-                  bookmark_data.add(category.id);
-                  preferences.setStringList("konuid", bookmark_data);
-                }
-                print(bookmark_data);
-
-                /// her basıldığında set state yapmalı
-              });
-            },
+          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+          decoration: BoxDecoration(
+            color: Colors.blueGrey[100],
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15),
+            ),
           ),
-          title: Text(category.title.toString()),
-          onTap: () {
-            setState(() {
-              api_sub_category_index = index.toString();
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: ListTile(
+              leading: IconButton(
+                icon: isBookmark(category.id)
+                    ? Icon(Icons.bookmark)
+                    : Icon(Icons.bookmark_border),
+                onPressed: () {
+                  setState(() {
+                    bookmark_data = preferences.getStringList("konuid");
 
-              /// go to detail view
-              navigation.navigateToPage(
-                  path: NavigationConstants.DETAIL_VIEW, data: category);
-            });
-          },
-        ),
-      ));
+                    try {
+                      if (bookmark_data.contains(category.id)) {
+                        bookmark_data.remove(category.id);
+                      } else {
+                        bookmark_data.add(category.id);
+                      }
+                    } catch (e) {
+                      preferences.setStringList("konuid", [""]);
+                      bookmark_data = preferences.getStringList("konuid");
+                      bookmark_data.add(category.id);
+                    }
+
+                    preferences.setStringList("konuid", bookmark_data);
+                  });
+                  print("dataaa" + bookmark_data.toString());
+
+                  /// her basıldığında set state yapmalı
+                },
+              ),
+              title: Text(category.title.toUpperCase()),
+              onTap: () {
+                setState(() {
+                  api_sub_category_index = index.toString();
+
+                  /// go to detail view
+                  navigation.navigateToPage(
+                      path: NavigationConstants.DETAIL_VIEW, data: category);
+                });
+              },
+            ),
+          ));
 
   Expanded appbar(Size size, BuildContext context) {
     return Expanded(
@@ -135,7 +184,7 @@ class SubCategoryView extends SubCategoryViewModel {
           ],
         ),
         child: Text(
-          "Alt kategoriler",
+          "Konular",
           style: Theme.of(context)
               .textTheme
               .headline5

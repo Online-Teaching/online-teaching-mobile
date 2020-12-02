@@ -11,6 +11,7 @@ List<String> isBookmarkList = [""];
 class SplashView extends SplashViewModel {
   @override
   Widget build(BuildContext context) {
+    getQuizIdandQuizNote();
     return WillPopScope(
         child: myScaffoldWidget(context),
         onWillPop: () {

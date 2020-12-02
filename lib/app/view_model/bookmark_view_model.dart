@@ -23,7 +23,7 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
   List<Subject> subjects = [];
   ISubjecteService subjecteService;
 
-  /// sibgle category
+  /// single category
   ICategoryNameService categoryService;
   Category category;
 
@@ -50,23 +50,25 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
     });
   }
 
-  Future<void> getSubjects(List<String> mylist) async {
-    subjects = await subjecteService.getSubjectList();
-    for (var item in subjects) {
-      print("view model subjects");
-      print(item.title);
-    }
-    mySubjectList_service = [];
-    preferences = await SharedPreferences.getInstance();
-    myBookMarkList = preferences.getStringList("konuid");
-    for (var item in subjects) {
-      if (myBookMarkList.contains(item.id)) {
-        if (!mySubjectList_service.contains(item)) {
-          mySubjectList_service.add(item);
+  Future<void> getSubjects() async {
+    try {
+      subjects = await subjecteService.getSubjectList();
+      for (var item in subjects) {
+        print("view model subjects");
+        print(item.title);
+      }
+      mySubjectList_service = [];
+      preferences = await SharedPreferences.getInstance();
+      myBookMarkList = preferences.getStringList("konuid");
+      for (var item in subjects) {
+        if (myBookMarkList.contains(item.id)) {
+          if (!mySubjectList_service.contains(item)) {
+            mySubjectList_service.add(item);
+          }
         }
       }
-    }
-    return mySubjectList_service;
+      return mySubjectList_service;
+    } catch (e) {}
   }
 
   Future<void> getSingleCategory() async {

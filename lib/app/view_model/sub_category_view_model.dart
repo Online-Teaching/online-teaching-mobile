@@ -34,8 +34,10 @@ abstract class SubCategoryViewModel extends State<SubCategory>
   }
 
   Future<void> getList() async {
-    categories = await categoryservice.getCategoriesList();
-    return categories;
+    try {
+      categories = await categoryservice.getCategoriesList();
+      return categories;
+    } catch (e) {}
   }
 }
 

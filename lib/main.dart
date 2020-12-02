@@ -1,7 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:online_teaching_mobile/app/view/category_page/category_page.dart';
-import 'package:online_teaching_mobile/app/view/category_page/category_page_view.dart';
 import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
 import 'package:online_teaching_mobile/app/view/quiz_page/quiz_view.dart';

@@ -49,12 +49,23 @@ class DetailView extends DetailViewModel {
             ),
           ],
         ),
-        child: Text(
-          "Türev",
-          style: Theme.of(context)
-              .textTheme
-              .headline5
-              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+        child: FutureBuilder(
+          future: getSingleCategory(),
+          builder: getSingleCategory() == null
+              ? (context, snapshot) {
+                  return Text('-');
+                }
+              : (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(
+                      category.title.toUpperCase(),
+                      style: Theme.of(context).textTheme.headline5.copyWith(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    );
+                  } else {
+                    return Text('-');
+                  }
+                },
         ),
       ),
     );
@@ -133,9 +144,5 @@ class DetailView extends DetailViewModel {
         ),
       ),
     );
-  }
-
-  hello() {
-    return category.summary;
   }
 }

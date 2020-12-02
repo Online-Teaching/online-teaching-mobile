@@ -38,20 +38,49 @@ class BookmarkView extends BookmarkViewModel {
       child: Container(
         margin: EdgeInsets.only(top: 5),
         child: FutureBuilder(
-            future: getSubjects(myBookMarkList),
+            future: getSubjects(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              return ListView.builder(
-                  itemCount: mySubjectList_service.length,
-                  scrollDirection: Axis.vertical,
-                  itemBuilder: (context, index) =>
-                      categoryCard(mySubjectList_service[index], index));
+              if (mySubjectList_service.length == 0) {
+                return Scaffold(
+                    body: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 50),
+                  child: Center(
+                      child: Text(
+                    "Kaydedilen konu bulunmuyor.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  )),
+                ));
+              } else {
+                return ListView.builder(
+                    itemCount: mySubjectList_service.length,
+                    scrollDirection: Axis.vertical,
+                    itemBuilder: (context, index) =>
+                        categoryCard(mySubjectList_service[index], index));
+              }
             }),
       ),
     );
   }
 
   Container categoryCard(Subject subject, int index) => Container(
-          child: Card(
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+      decoration: BoxDecoration(
+        color: Colors.blueGrey[100],
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
         child: ListTile(
           leading: IconButton(
             icon: Icon(Icons.bookmark),
@@ -62,7 +91,7 @@ class BookmarkView extends BookmarkViewModel {
               });
             },
           ),
-          title: Text(subject.title.toString()),
+          title: Text(subject.title.toUpperCase()),
           onTap: () {
             create_Url(subject.id, context);
             navigation.navigateToPage(path: NavigationConstants.DETAIL_VIEW);

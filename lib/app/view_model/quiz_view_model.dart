@@ -33,12 +33,14 @@ abstract class QuizViewModel extends State<Quiz> with BaseViewModel {
   }
 
   Future<void> getquiz() async {
-    myquiz = await questionService.getQuestionList();
-    for (var item in myquiz.questionList) {
-      print(item.question);
-      print("sorular geliyor amaaaaaaaaaaaa");
-    }
-    return myquiz;
+    try {
+      myquiz = await questionService.getQuestionList();
+      for (var item in myquiz.questionList) {
+        print(item.question);
+        print("sorular geliyor amaaaaaaaaaaaa");
+      }
+      return myquiz;
+    } catch (e) {}
   }
 }
 

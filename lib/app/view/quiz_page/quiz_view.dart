@@ -8,6 +8,8 @@ import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 class QuizView extends QuizViewModel {
   //radiobutton
@@ -26,11 +28,27 @@ class QuizView extends QuizViewModel {
         : stepperType = StepperType.horizontal);
   }
 
+  /// quiz not with shared preferences
+  List<String> quizNote = [];
+  List<String> quizid = [];
+
+  SharedPreferences preferences;
+
   @override
   void initState() {
     super.initState();
     selectedRadio = 0;
     selectedRadioTile = 0;
+    getLocalData();
+  }
+
+  Future getLocalData() async {
+    preferences = await SharedPreferences.getInstance();
+    quizid = preferences.getStringList("quizid");
+    quizNote = preferences.getStringList("quizNote");
+
+    preferences.setStringList("quizid", quizid);
+    preferences.setStringList("quizNote", quizNote);
   }
 
   @override
@@ -104,6 +122,7 @@ class QuizView extends QuizViewModel {
                     new FlatButton(
                       child: new Text("Close"),
                       onPressed: () {
+                        setQuizNote_SP(correct_answer * 10, myquiz.id);
                         complete = false;
                         navigation.navigateToPageClear(
                             path: NavigationConstants.BOTTOM_NAVIGATION);
@@ -124,9 +143,9 @@ class QuizView extends QuizViewModel {
                   builder: getquiz() != null
                       ? (BuildContext context, AsyncSnapshot snapshot) {
                           if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
-                          } //CIRCULAR INDICATOR
-                          else {
+                            return Center(
+                                child: Text("Bu konunun Quizi bulunmuyor."));
+                          } else {
                             build_stapper();
                             return Stepper(
                               steps: steps,
@@ -156,25 +175,25 @@ class QuizView extends QuizViewModel {
                         }),
 
               /*Stepper(
-                steps: steps,
-                type: stepperType,
-                currentStep: currentStep,
-                onStepTapped: (step) => setState(() => currentStep = step),
-                onStepContinue: true
-                    ? () => setState(() {
-                          print("heyyyyy nuuuuuuuuuuulllllllllllll");
-
-                          calculate_points(currentStep);
-                          if (currentStep != 9)
-                            ++currentStep;
-                          else if (currentStep == 9) {
-                            print("test bitti başka sayfaya geç");
-                            complete = true;
-                          }
-                        })
-                    : null,
-              ),
-              */
+                                        steps: steps,
+                                        type: stepperType,
+                                        currentStep: currentStep,
+                                        onStepTapped: (step) => setState(() => currentStep = step),
+                                        onStepContinue: true
+                                            ? () => setState(() {
+                                                  print("heyyyyy nuuuuuuuuuuulllllllllllll");
+                        
+                                                  calculate_points(currentStep);
+                                                  if (currentStep != 9)
+                                                    ++currentStep;
+                                                  else if (currentStep == 9) {
+                                                    print("test bitti başka sayfaya geç");
+                                                    complete = true;
+                                                  }
+                                                })
+                                            : null,
+                                      ),
+                                      */
             )),
     ]);
   }
@@ -254,5 +273,45 @@ class QuizView extends QuizViewModel {
     setState(() {
       selectedRadioTile = val;
     });
+  }
+
+  Future<void> setQuizNote_SP(int note, String id) async {
+    // shared preferences ile quizid ve quiz not kaydet
+
+    int index;
+
+    quizid = preferences.getStringList("quizid");
+    quizNote = preferences.getStringList("quizNote");
+
+    try {
+      if (quizid.contains(id)) {
+        index = quizid.indexOf(id);
+        quizid.remove(id);
+        quizNote.removeAt(index);
+      }
+      quizid.add(id);
+      quizNote.add(note.toString());
+    } catch (e) {
+      preferences.setStringList("quizid", [""]);
+      preferences.setStringList("quizNote", [""]);
+      quizid = preferences.getStringList("quizid");
+      quizNote = preferences.getStringList("quizNote");
+      quizid.add(id);
+      quizNote.add(note.toString());
+    }
+
+    preferences.setStringList("quizid", quizid);
+    preferences.setStringList("quizNote", quizNote);
+
+    for (var item in quizid) {
+      print("///// quiz id///" + item);
+    }
+    print(quizid.length.toString() + "id uzunluğuu");
+
+    for (var item in quizNote) {
+      print("///// quiz note///" + item);
+    }
+
+    print(quizNote.length.toString() + "note uzunluğuu");
   }
 }
