@@ -58,12 +58,10 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
           }
         }
       }
-      for (var item in mySubjectList_service) {
-        print("??????????????????????*" + item.title);
-      }
       return mySubjectList_service;
     } catch (e) {
       print("some error///" + e.toString());
+      return mySubjectList_service;
     }
   }
 

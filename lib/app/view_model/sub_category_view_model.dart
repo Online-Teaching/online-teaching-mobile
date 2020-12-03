@@ -8,7 +8,7 @@ import 'package:online_teaching_mobile/core/init/navigation/navigation_service.d
 abstract class SubCategoryViewModel extends State<SubCategory>
     with BaseViewModel {
   bool isLoading = false;
-  List<Category> categories = [];
+  List<Category> categories;
   ICategoryService categoryservice;
 
   @override
@@ -34,10 +34,15 @@ abstract class SubCategoryViewModel extends State<SubCategory>
   }
 
   Future<void> getList() async {
-    try {
-      categories = await categoryservice.getCategoriesList();
+    print("try çalışıyor");
+    categories = await categoryservice.getCategoriesList();
+    print("try" + categories.toString());
+    if (categories == null) {
+      categories = [];
       return categories;
-    } catch (e) {}
+    } else {
+      return categories;
+    }
   }
 }
 

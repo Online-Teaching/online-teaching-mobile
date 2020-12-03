@@ -151,52 +151,39 @@ class ProfileView extends ProfileViewModel {
             Expanded(
               flex: 10,
               child: Container(
-                  //color: Colors.amber,
                   child: FutureBuilder(
                 future: getSubjects(),
-                builder: (getSubjects() == null
-                    ? Center(child: CircularProgressIndicator())
-                    : (BuildContext context, AsyncSnapshot snapshot) {
-                        if (snapshot.hasData) {
-                          return ListView.builder(
-                              itemCount: mySubjectList_service.length,
-                              scrollDirection: Axis.vertical,
-                              itemBuilder: (context, index) => testCard(
-                                  mySubjectList_service.reversed
-                                      .toList()[index],
-                                  index));
-                        } else {
-                          return Container(
-                            margin: EdgeInsets.symmetric(horizontal: 50),
-                            child: Center(
-                                child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Quiz Yok",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 27,
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Text(
-                                  "Henüz gösterilecek bir Quiz sonucun yok.",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            )),
-                          );
-                        }
-                      }),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    print("profile log data var");
+                    if (snapshot.hasData != null) {
+                      print("profile log data null değil");
+                      if (mySubjectList_service.length == 0) {
+                        return Center(
+                          child: Text("quiz yok"),
+                        );
+                      } else {
+                        return ListView.builder(
+                            itemCount: mySubjectList_service.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, index) => testCard(
+                                mySubjectList_service.reversed.toList()[index],
+                                index));
+                      }
+                    } else {
+                      return Center(
+                        child: Text("quiz yok"),
+                      );
+                    }
+                  } else {
+                    print("profile log" + snapshot.data.toString());
+                    print("profile log" +
+                        mySubjectList_service.length.toString());
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
               )),
             ),
           ],
