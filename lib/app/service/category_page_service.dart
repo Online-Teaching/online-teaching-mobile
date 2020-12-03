@@ -17,17 +17,19 @@ class CategoryService implements ICategoryService {
   CategoryService._init();
 
   Future<List<Category>> getCategoriesList() async {
-    API api = new API();
-    final baseUrl = api.getOnlineTeaching_2_Url();
-    var _response =
-        await http.get("$baseUrl/kategoriler/$api_category_url.json");
-    var jsonData = json.decode(_response.body);
-    //https://online-teaching2.firebaseio.com/kategoriler/mat.json
-    categories = [];
-    for (var c in jsonData) {
-      categories.add(Category.fromJson(c));
-    }
+    try {
+      API api = new API();
+      final baseUrl = api.getOnlineTeaching_2_Url();
+      var _response =
+          await http.get("$baseUrl/kategoriler/$api_category_url.json");
+      var jsonData = json.decode(_response.body);
+      //https://online-teaching2.firebaseio.com/kategoriler/mat.json
+      categories = [];
+      for (var c in jsonData) {
+        categories.add(Category.fromJson(c));
+      }
 
-    return categories;
+      return categories;
+    } catch (e) {}
   }
 }

@@ -140,39 +140,41 @@ class QuizView extends QuizViewModel {
                   colorScheme: ColorScheme.light(primary: Colors.orange)),
               child: FutureBuilder(
                   future: getquiz(),
-                  builder: getquiz() != null
-                      ? (BuildContext context, AsyncSnapshot snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(
-                                child: Text("Bu konunun Quizi bulunmuyor."));
-                          } else {
-                            build_stapper();
-                            return Stepper(
-                              steps: steps,
-                              type: stepperType,
-                              currentStep: currentStep,
-                              onStepTapped: (step) =>
-                                  setState(() => currentStep = step),
-                              onStepContinue: true
-                                  ? () => setState(() {
-                                        print(
-                                            "heyyyyy nuuuuuuuuuuulllllllllllll");
-
-                                        calculate_points(currentStep);
-                                        if (currentStep != 9)
-                                          ++currentStep;
-                                        else if (currentStep == 9) {
-                                          print("test bitti başka sayfaya geç");
-                                          complete = true;
-                                        }
-                                      })
-                                  : null,
-                            );
-                          }
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      print("logquiz 1 " + myquiz.toString());
+                      if (snapshot.data != null) {
+                        print("logquiz 2 " + myquiz.toString());
+                        if (myquiz.questionList.length == 0) {
+                          print("logquiz 3 " + myquiz.toString());
+                          return Center(
+                              child: Text("Bu konunun quizi bulunmuyor."));
+                        } else {
+                          print("logquiz 4 " + myquiz.toString());
+                          build_stapper();
+                          return Stepper(
+                            steps: steps,
+                            type: stepperType,
+                            currentStep: currentStep,
+                            onStepTapped: (step) =>
+                                setState(() => currentStep = step),
+                            onStepContinue: true
+                                ? () => setState(() {
+                                      calculate_points(currentStep);
+                                      if (currentStep != 9)
+                                        ++currentStep;
+                                      else if (currentStep == 9) {
+                                        complete = true;
+                                      }
+                                    })
+                                : null,
+                          );
                         }
-                      : (BuildContext context, AsyncSnapshot snapshot) {
-                          return Center(child: CircularProgressIndicator());
-                        }),
+                      }
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
 
               /*Stepper(
                                         steps: steps,
@@ -303,14 +305,9 @@ class QuizView extends QuizViewModel {
     preferences.setStringList("quizid", quizid);
     preferences.setStringList("quizNote", quizNote);
 
-    for (var item in quizid) {
-      print("///// quiz id///" + item);
-    }
-    print(quizid.length.toString() + "id uzunluğuu");
-
-    for (var item in quizNote) {
-      print("///// quiz note///" + item);
-    }
+    print("quiznotesıralaması log/quiz view close butonu " + quizid.toString());
+    print(
+        "quiznotesıralaması log/quiz view close butonu " + quizNote.toString());
 
     print(quizNote.length.toString() + "note uzunluğuu");
   }

@@ -40,26 +40,32 @@ class BookmarkView extends BookmarkViewModel {
         child: FutureBuilder(
             future: getSubjects(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (mySubjectList_service.length == 0) {
-                return Scaffold(
-                    body: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 50),
-                  child: Center(
-                      child: Text(
-                    "Kaydedilen konu bulunmuyor.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 17,
-                      color: Colors.black,
-                    ),
-                  )),
-                ));
+              if (snapshot.hasData) {
+                if (snapshot.hasData != null) {
+                  if (mySubjectList_service.length == 0) {
+                    return Scaffold(
+                        body: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      child: Center(
+                          child: Text(
+                        "Kaydedilen konu bulunmuyor.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                        ),
+                      )),
+                    ));
+                  } else {
+                    return ListView.builder(
+                        itemCount: mySubjectList_service.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) =>
+                            categoryCard(mySubjectList_service[index], index));
+                  }
+                }
               } else {
-                return ListView.builder(
-                    itemCount: mySubjectList_service.length,
-                    scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) =>
-                        categoryCard(mySubjectList_service[index], index));
+                return Center(child: CircularProgressIndicator());
               }
             }),
       ),

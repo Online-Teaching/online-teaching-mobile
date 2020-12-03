@@ -55,50 +55,42 @@ class SubCategoryView extends SubCategoryViewModel {
         margin: EdgeInsets.only(top: 5),
         child: FutureBuilder(
             future: getList(),
-            builder: getList() == null
-                ? Center(
-                    child: Text("konu yok"),
-                  )
-                : (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: categories.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) =>
-                              categoryCard(categories[index], index));
-                    } else {
-                      return Scaffold(
-                          body: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 50),
-                        child: Center(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Konu Yok",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            Text(
-                              "Bu kategoride konu bulunmuyor",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 17,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        )),
-                      ));
-                    }
-                  }),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                /// konu yoksa konu yok göster kesinlikle bu if içindes
+
+                if (snapshot.hasData != null) {
+                  print("log 2 " + categories.length.toString());
+                  if (categories.length == 0) {
+                    print("log 3 " + categories.length.toString());
+                    return Scaffold(
+                        body: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      child: Center(
+                          child: Text(
+                        "Bu kategorinin konusu bulunmuyor.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Colors.black,
+                        ),
+                      )),
+                    ));
+                  } else {
+                    print("log 4 " + categories.length.toString());
+                    return ListView.builder(
+                        itemCount: categories.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) =>
+                            categoryCard(categories[index], index));
+                  }
+                }
+              }
+              // yüklenme anı
+
+              print("log    " + categories.toString());
+              return Center(child: CircularProgressIndicator());
+            }),
       ),
     );
   }

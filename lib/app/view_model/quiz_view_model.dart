@@ -7,8 +7,9 @@ import 'package:online_teaching_mobile/core/init/navigation/navigation_service.d
 
 abstract class QuizViewModel extends State<Quiz> with BaseViewModel {
   bool isLoading = false;
-  MyQuiz myquiz;
+  MyQuiz myquiz = new MyQuiz();
   IQuestionService questionService;
+  int hello = 1;
 
   @override
   void initState() {
@@ -35,12 +36,11 @@ abstract class QuizViewModel extends State<Quiz> with BaseViewModel {
   Future<void> getquiz() async {
     try {
       myquiz = await questionService.getQuestionList();
-      for (var item in myquiz.questionList) {
-        print(item.question);
-        print("sorular geliyor amaaaaaaaaaaaa");
-      }
-      return myquiz;
-    } catch (e) {}
+    } catch (e) {
+      myquiz.questionList = [];
+    }
+
+    return myquiz;
   }
 }
 
