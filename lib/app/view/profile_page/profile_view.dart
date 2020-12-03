@@ -49,6 +49,9 @@ class ProfileView extends ProfileViewModel {
     preferences = await SharedPreferences.getInstance();
     quizid = preferences.getStringList("quizid");
     quizNote = preferences.getStringList("quizNote");
+
+    print("quiznotesıralaması log/quiz view  localdata " + quizNote.toString());
+    print("quiznotesıralaması log/quiz view  localdata " + quizid.toString());
   }
 
   Expanded appbar(Size size, BuildContext context) {
@@ -154,21 +157,38 @@ class ProfileView extends ProfileViewModel {
                   child: FutureBuilder(
                 future: getSubjects(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  print("quiznotesıralaması log/quiz view  future içi " +
+                      quizNote.toString());
+                  for (var item in mySubjectList_service) {
+                    print("quiznotesıralaması log/quiz view  future içi " +
+                        item.id +
+                        "   " +
+                        item.title);
+                    print(
+                        "quiznotesıralaması   mySubjectList_service uzunluğuu  " +
+                            mySubjectList_service.length.toString());
+                    print("quiznotesıralaması   quizNote uzunluğuu  " +
+                        quizNote.length.toString());
+                  }
+
                   if (snapshot.hasData) {
                     print("profile log data var");
                     if (snapshot.hasData != null) {
                       print("profile log data null değil");
                       if (mySubjectList_service.length == 0) {
                         return Center(
-                          child: Text("quiz yok"),
+                          child: Text("Henüz hiç Quiz çözmedin."),
                         );
                       } else {
                         return ListView.builder(
-                            itemCount: mySubjectList_service.length,
+                            itemCount: quizid.length,
                             scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) => testCard(
-                                mySubjectList_service.reversed.toList()[index],
-                                index));
+                            itemBuilder: (context, index) {
+                              try {
+                                return testCard(
+                                    mySubjectList_service[index], index);
+                              } catch (e) {}
+                            });
                       }
                     } else {
                       return Center(

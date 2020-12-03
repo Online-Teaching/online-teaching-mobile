@@ -68,7 +68,10 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
         }
       }
       return mySubjectList_service;
-    } catch (e) {}
+    } catch (e) {
+      mySubjectList_service = [];
+      return mySubjectList_service;
+    }
   }
 
   Future<void> getSingleCategory() async {

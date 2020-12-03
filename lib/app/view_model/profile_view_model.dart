@@ -51,13 +51,17 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
       preferences = await SharedPreferences.getInstance();
       myQuizIdList = preferences.getStringList("quizid");
 
-      for (var item in subjects) {
-        if (myQuizIdList.contains(item.id)) {
-          if (!mySubjectList_service.contains(item)) {
-            mySubjectList_service.add(item);
+      for (var item in myQuizIdList) {
+        int i = 0;
+        for (i = 0; i < subjects.length; i++) {
+          if (item == subjects[i].id) {
+            mySubjectList_service.add(subjects[i]);
           }
         }
       }
+
+      print("quiznotesıralaması log/quiz view model butonu " +
+          myQuizIdList.toString());
       return mySubjectList_service;
     } catch (e) {
       print("some error///" + e.toString());
@@ -83,7 +87,7 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
         isExistQuiz = 1;
       }
 
-      star = myort;
+      star = myort / 20;
       myort = sum / (myQuizNoteList.length - 1);
 
       return 23;

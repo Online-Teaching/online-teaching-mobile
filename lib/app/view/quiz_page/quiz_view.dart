@@ -305,14 +305,9 @@ class QuizView extends QuizViewModel {
     preferences.setStringList("quizid", quizid);
     preferences.setStringList("quizNote", quizNote);
 
-    for (var item in quizid) {
-      print("///// quiz id///" + item);
-    }
-    print(quizid.length.toString() + "id uzunluğuu");
-
-    for (var item in quizNote) {
-      print("///// quiz note///" + item);
-    }
+    print("quiznotesıralaması log/quiz view close butonu " + quizid.toString());
+    print(
+        "quiznotesıralaması log/quiz view close butonu " + quizNote.toString());
 
     print(quizNote.length.toString() + "note uzunluğuu");
   }
