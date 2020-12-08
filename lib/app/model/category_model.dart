@@ -1,5 +1,5 @@
 class Category {
-  int id;
+  String id;
   String title;
   String summary;
 
@@ -20,6 +20,10 @@ class Category {
   }
 
   Map toJson2() {
-    return {'id': id, 'title': title, 'summary': summary};
+    return {
+      'id': id,
+      'title': title,
+      'summary': summary,
+    };
   }
 }

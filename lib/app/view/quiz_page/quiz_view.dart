@@ -2,14 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/quiz_model.dart';
+import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:toast/toast.dart';
 
 class QuizView extends QuizViewModel {
-  MyQuiz quiz;
+  final logger = Logger(printer: SimpleLogPrinter('quiz_view.dart'));
   //radiobutton
   int selectedRadioTile;
   int correct_answer = 0;
@@ -26,17 +31,34 @@ class QuizView extends QuizViewModel {
         : stepperType = StepperType.horizontal);
   }
 
+  /// quiz not with shared preferences
+  List<String> quizNote = [];
+  List<String> quizid = [];
+
+  SharedPreferences preferences;
+
   @override
   void initState() {
     super.initState();
     selectedRadio = 0;
     selectedRadioTile = 0;
+    getLocalData();
+  }
+
+  Future getLocalData() async {
+    preferences = await SharedPreferences.getInstance();
+    quizid = preferences.getStringList("quizid");
+    quizNote = preferences.getStringList("quizNote");
+
+    preferences.setStringList("quizid", quizid);
+    preferences.setStringList("quizNote", quizNote);
+
+    logger.i("getLocalData | quizid -> $quizid");
+    logger.i("getLocalData | quizNote -> $quizNote");
   }
 
   @override
   Widget build(BuildContext context) {
-    quiz = ModalRoute.of(context).settings.arguments;
-    build_stapper();
     return WillPopScope(
         child: scaffoldWidget(context),
         onWillPop: () {
@@ -80,7 +102,7 @@ class QuizView extends QuizViewModel {
             ),
             onPressed: () {
               navigation.navigateToPage(
-                  path: NavigationConstants.CATEGORY_VIEW);
+                  path: NavigationConstants.BOTTOM_NAVIGATION);
             },
           ),
           title: Text(
@@ -106,9 +128,10 @@ class QuizView extends QuizViewModel {
                     new FlatButton(
                       child: new Text("Close"),
                       onPressed: () {
+                        setQuizNote_SP(correct_answer * 10, myquiz.id);
                         complete = false;
                         navigation.navigateToPageClear(
-                            path: NavigationConstants.CATEGORY_VIEW);
+                            path: NavigationConstants.BOTTOM_NAVIGATION);
                       },
                     ),
                   ],
@@ -116,47 +139,91 @@ class QuizView extends QuizViewModel {
               ),
             )
           : Expanded(
-              child: Stepper(
-                steps: steps,
-                type: stepperType,
-                currentStep: currentStep,
-                onStepTapped: (step) => setState(() => currentStep = step),
-                onStepContinue: true
-                    ? () => setState(() {
-                          print("heyyyyy nuuuuuuuuuuulllllllllllll");
+              child: Theme(
+              data: ThemeData(
+                  accentColor: Colors.red,
+                  primarySwatch: Colors.red, //stepper rengi
+                  colorScheme: ColorScheme.light(primary: Colors.orange)),
+              child: FutureBuilder(
+                  future: getquiz(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      logger.i("body | snapshot.hasData true");
 
-                          calculate_points(currentStep);
-                          if (currentStep != 9)
-                            ++currentStep;
-                          else if (currentStep == 9) {
-                            print("test bitti başka sayfaya geç");
-                            complete = true;
-                          }
-                        })
-                    : null,
-              ),
-            ),
+                      if (snapshot.data != null) {
+                        logger.i("body | snapshot.hasData null değil");
+
+                        if (myquiz.questionList.length == 0) {
+                          logger.i(
+                              "body | questionList boş geliyor, bu konunun quizi yok");
+
+                          return Center(
+                              child: Text("Bu konunun quizi bulunmuyor."));
+                        } else {
+                          logger.i("body | quiz görüntülendi");
+                          build_stapper();
+                          return Stepper(
+                            steps: steps,
+                            type: stepperType,
+                            currentStep: currentStep,
+                            onStepTapped: (step) =>
+                                setState(() => currentStep = step),
+                            onStepContinue: true
+                                ? () => setState(() {
+                                      calculate_points(currentStep);
+                                      if (currentStep != 9)
+                                        ++currentStep;
+                                      else if (currentStep == 9) {
+                                        complete = true;
+                                      }
+                                    })
+                                : null,
+                          );
+                        }
+                      }
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
+
+              /*Stepper(
+                                        steps: steps,
+                                        type: stepperType,
+                                        currentStep: currentStep,
+                                        onStepTapped: (step) => setState(() => currentStep = step),
+                                        onStepContinue: true
+                                            ? () => setState(() {
+                                                  print("heyyyyy nuuuuuuuuuuulllllllllllll");
+                        
+                                                  calculate_points(currentStep);
+                                                  if (currentStep != 9)
+                                                    ++currentStep;
+                                                  else if (currentStep == 9) {
+                                                    print("test bitti başka sayfaya geç");
+                                                    complete = true;
+                                                  }
+                                                })
+                                            : null,
+                                      ),
+                                      */
+            )),
     ]);
   }
 
   void calculate_points(int index) {
-    if (quiz.questionList[index].correct == selectedRadioTile) {
+    if (myquiz.questionList[index].correct == selectedRadioTile) {
       correct_answer++;
-      print(quiz.questionList[index].correct.toString() +
-          "            " +
-          selectedRadioTile.toString());
-      print(correct_answer);
+
+      logger.i("calculate_points | $correct_answer doğru cevap verildi.");
     } else {
       wrong_answer++;
-      print(quiz.questionList[index].correct.toString() +
-          "            " +
-          selectedRadioTile.toString());
-      print(wrong_answer);
+      logger.i("calculate_points | $wrong_answer yanlış cevap verildi.");
     }
     selectedRadioTile = 0;
   }
 
   void build_stapper() {
+    logger.i("build_stepper | each step");
     for (var i = 0; i < 10; i++) {
       steps[i] = Step(
           isActive: true,
@@ -174,25 +241,21 @@ class QuizView extends QuizViewModel {
   }
 
   List<Widget> questionCard(int i) => <Widget>[
-        Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(13),
-            child: Column(
-              children: [
-                Text(
-                  quiz.questionList[i].question,
-                  style:
-                      context.textTheme.bodyText1.copyWith(color: Colors.black),
-                ),
-                eachRadioButton(quiz.questionList[i].answer1, 1),
-                eachRadioButton(quiz.questionList[i].answer2, 2),
-                eachRadioButton(quiz.questionList[i].answer3, 3),
-                eachRadioButton(quiz.questionList[i].answer4, 4),
-              ],
-            ),
+        Container(
+          /// Container ı card ile sarmalayabilirsin !
+          padding: EdgeInsets.all(13),
+          child: Column(
+            children: [
+              Text(
+                myquiz.questionList[i].question,
+                style:
+                    context.textTheme.bodyText1.copyWith(color: Colors.black),
+              ),
+              eachRadioButton(myquiz.questionList[i].answer1, 1),
+              eachRadioButton(myquiz.questionList[i].answer2, 2),
+              eachRadioButton(myquiz.questionList[i].answer3, 3),
+              eachRadioButton(myquiz.questionList[i].answer4, 4),
+            ],
           ),
         )
       ];
@@ -206,7 +269,6 @@ class QuizView extends QuizViewModel {
         style: TextStyle(fontSize: context.normalValue),
       ),
       onChanged: (val) {
-        print("Radio Tile pressed $val");
         setSelectedRadioTile(val);
       },
       activeColor: Colors.black,
@@ -218,5 +280,39 @@ class QuizView extends QuizViewModel {
     setState(() {
       selectedRadioTile = val;
     });
+  }
+
+  Future<void> setQuizNote_SP(int note, String id) async {
+    // shared preferences ile quizid ve quiz not kaydet
+
+    int index;
+
+    quizid = preferences.getStringList("quizid");
+    quizNote = preferences.getStringList("quizNote");
+
+    try {
+      if (quizid.contains(id)) {
+        index = quizid.indexOf(id);
+        quizid.remove(id);
+        quizNote.removeAt(index);
+      }
+      quizid.add(id);
+      quizNote.add(note.toString());
+    } catch (e) {
+      logger.e("setQuizNote_SP | quizid ye ulaşılamadı");
+      preferences.setStringList("quizid", [""]);
+      preferences.setStringList("quizNote", [""]);
+      quizid = preferences.getStringList("quizid");
+      quizNote = preferences.getStringList("quizNote");
+      quizid.add(id);
+      quizNote.add(note.toString());
+      logger.e("setQuizNote_SP | quizid ve quizNote oluşturuldu");
+    }
+
+    preferences.setStringList("quizid", quizid);
+    preferences.setStringList("quizNote", quizNote);
+
+    logger.i("setQuizNote_SP | yeni quizid -> $quizid");
+    logger.i("setQuizNote_SP | yeni quizNote -> $quizNote");
   }
 }

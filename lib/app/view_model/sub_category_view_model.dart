@@ -1,18 +1,18 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/category_page_service.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategory.dart';
+import 'package:online_teaching_mobile/app/view/sub_category_page/sub_category.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
-import '../view/category_page/category_page.dart';
-import 'package:http/http.dart' as http;
 
-abstract class CategoryViewModel extends State<CategoryScreen>
+abstract class SubCategoryViewModel extends State<SubCategory>
     with BaseViewModel {
-  final baseUrl = "https://online-teaching-14e16.firebaseio.com";
+  final logger =
+      Logger(printer: SimpleLogPrinter('sub_category_view_model.dart'));
   bool isLoading = false;
-  List<Category> categories = [];
+  List<Category> categories;
   ICategoryService categoryservice;
 
   @override
@@ -39,7 +39,15 @@ abstract class CategoryViewModel extends State<CategoryScreen>
 
   Future<void> getList() async {
     categories = await categoryservice.getCategoriesList();
-    return categories;
+    logger.i("getList | seçilen kategorinin konuları çekiliyor...");
+
+    if (categories == null) {
+      logger.i("getList | categories null");
+      categories = [];
+      return categories;
+    } else {
+      return categories;
+    }
   }
 }
 

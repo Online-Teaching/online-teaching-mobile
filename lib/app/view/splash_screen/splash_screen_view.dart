@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view_model/splash_screen_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
+
+List<String> isBookmarkList = [""];
 
 class SplashView extends SplashViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('splash_screen_view.dart'));
   @override
   Widget build(BuildContext context) {
+    logger.i("build");
+    // getQuizIdandQuizNote();
     return WillPopScope(
         child: myScaffoldWidget(context),
         onWillPop: () {
@@ -50,15 +57,15 @@ class SplashView extends SplashViewModel {
               children: [
                 Text(
                   "Online Teaching",
-                  style: context.textTheme.headline4.copyWith(
-                      color: Colors.green, fontWeight: FontWeight.bold),
+                  style: context.textTheme.headline4
+                      .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 Lottie.asset('assets/lottie_json/student1.json'),
                 SizedBox(
                   width: context.width * 0.8,
                   height: context.height * 0.08,
                   child: FlatButton(
-                    color: Colors.green,
+                    color: Colors.red,
                     child: Text(
                       "Başla",
                       style: TextStyle(
@@ -69,7 +76,7 @@ class SplashView extends SplashViewModel {
                     ),
                     onPressed: () {
                       navigation.navigateToPage(
-                          path: NavigationConstants.CATEGORY_VIEW, data: 20);
+                          path: NavigationConstants.LOGIN);
                     },
                   ),
                 )

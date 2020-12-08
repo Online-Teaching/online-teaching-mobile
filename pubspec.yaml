@@ -31,6 +31,11 @@ dependencies:
   syncfusion_flutter_gauges: ^18.2.44
   toast: ^0.1.5
   flutter_launcher_icons: ^0.7.5
+  shared_preferences: 0.5.12+4
+  step_progress_indicator: 0.2.5+8 
+  circle_chart: 0.0.3
+  flutter_circular_chart: 0.1.0
+  logger: ^0.6.0
 
 flutter_icons:
   android: "launcher_icon"
