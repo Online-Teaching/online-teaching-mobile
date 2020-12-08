@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
@@ -9,10 +10,13 @@ import 'package:online_teaching_mobile/app/service/interfaces/ICategoryName.dart
 import 'package:online_teaching_mobile/app/service/interfaces/ISubject.dart';
 import 'package:online_teaching_mobile/app/service/subject_service.dart';
 import 'package:online_teaching_mobile/app/view/bookmark_page/bookmark.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('bookmark_view_model.dart'));
+
   ///
   SharedPreferences preferences;
   List<String> myBookMarkList = [];
@@ -53,10 +57,7 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
   Future<void> getSubjects() async {
     try {
       subjects = await subjecteService.getSubjectList();
-      for (var item in subjects) {
-        print("view model subjects");
-        print(item.title);
-      }
+      logger.i("getSubjects | bookmarklı konular çekildi");
       mySubjectList_service = [];
       preferences = await SharedPreferences.getInstance();
       myBookMarkList = preferences.getStringList("konuid");
@@ -67,8 +68,10 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
           }
         }
       }
+
       return mySubjectList_service;
     } catch (e) {
+      logger.e("getSubjects | error");
       mySubjectList_service = [];
       return mySubjectList_service;
     }
@@ -76,10 +79,8 @@ abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
 
   Future<void> getSingleCategory() async {
     category = await categoryService.getSingleCategory();
-    print("bookmark view model gelen category bilgileri");
-    print(category.id);
-    print(category.title);
-    print(category.summary);
+    String name = category.title;
+    logger.i("getSingleCategory | $name konusuna gidiliyor");
     return category;
   }
 }

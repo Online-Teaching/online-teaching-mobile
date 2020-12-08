@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ISubject.dart';
 import 'package:online_teaching_mobile/app/service/subject_service.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SplashViewModel extends State<Splash> with BaseViewModel {
+  final logger =
+      Logger(printer: SimpleLogPrinter('splash_screen_view_model.dart'));
   SharedPreferences preferences;
 
   List<String> myQuizIdList = [];
@@ -25,7 +29,7 @@ abstract class SplashViewModel extends State<Splash> with BaseViewModel {
     });
   }
 
-  Future<void> getQuizIdandQuizNote() async {
+/*  Future<void> getQuizIdandQuizNote() async {
     try {
       preferences = await SharedPreferences.getInstance();
       myQuizNoteList = preferences.getStringList("quizNote");
@@ -36,11 +40,11 @@ abstract class SplashViewModel extends State<Splash> with BaseViewModel {
       }
       ort = sum / (myQuizNoteList.length - 1);
 
-      return ort;
+      return 99999;
     } catch (e) {
       ort = 0;
     }
-  }
+  }*/
 }
 
 /// categories ı çekip const a at

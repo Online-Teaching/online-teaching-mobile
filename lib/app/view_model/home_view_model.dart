@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/category_names_service.dart';
 import 'package:online_teaching_mobile/app/service/category_page_service.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategory.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategoryName.dart';
 import 'package:online_teaching_mobile/app/view/home_page/home.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 
 abstract class HomeViewModel extends State<Home> with BaseViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('home_view_model.dart'));
   bool isLoading = false;
   List<String> categories_name = [];
   ICategoryNameService categoryservice;
@@ -36,6 +39,7 @@ abstract class HomeViewModel extends State<Home> with BaseViewModel {
 
   Future<void> getList2() async {
     categories_name = await categoryservice.getCategoriesNameList();
+    logger.i("getList2 | kategori isimleri çekildi");
     return categories_name;
   }
 

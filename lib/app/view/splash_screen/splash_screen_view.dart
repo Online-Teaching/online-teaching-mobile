@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view_model/splash_screen_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 
 List<String> isBookmarkList = [""];
 
 class SplashView extends SplashViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('splash_screen_view.dart'));
   @override
   Widget build(BuildContext context) {
-    getQuizIdandQuizNote();
+    logger.i("build");
+    // getQuizIdandQuizNote();
     return WillPopScope(
         child: myScaffoldWidget(context),
         onWillPop: () {

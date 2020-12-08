@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ISubject.dart';
 import 'package:online_teaching_mobile/app/service/subject_service.dart';
 import 'package:online_teaching_mobile/app/view/profile_page/profile.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('profile_view_model.dart'));
   SharedPreferences preferences;
   List<String> myQuizIdList = [];
   List<String> myQuizNoteList = [];
@@ -50,6 +53,7 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
       mySubjectList_service = [];
       preferences = await SharedPreferences.getInstance();
       myQuizIdList = preferences.getStringList("quizid");
+      logger.i("getSubjects | quizid -> $myQuizIdList");
 
       for (var item in myQuizIdList) {
         int i = 0;
@@ -60,11 +64,9 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
         }
       }
 
-      print("quiznotesıralaması log/quiz view model butonu " +
-          myQuizIdList.toString());
       return mySubjectList_service;
     } catch (e) {
-      print("some error///" + e.toString());
+      logger.e("getSubjects | error");
       return mySubjectList_service;
     }
   }
@@ -80,17 +82,17 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
         sum += int.parse(myQuizNoteList[i]);
       }
       if (myQuizIdList.length == 0) {
-        print("is Exist quiz? " + myQuizIdList.length.toString());
+        logger.i("listelenecek quiz yok");
         isExistQuiz = 0;
       } else if (myQuizIdList.length >= 1) {
-        print("is Exist quiz? " + myQuizIdList.length.toString());
+        logger.i("listelenecek quiz var");
         isExistQuiz = 1;
       }
 
       star = myort / 20;
       myort = sum / (myQuizNoteList.length - 1);
 
-      return 23;
+      return star;
     } catch (e) {
       return 0;
     }

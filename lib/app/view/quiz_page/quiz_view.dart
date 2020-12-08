@@ -2,16 +2,19 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/quiz_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 class QuizView extends QuizViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('quiz_view.dart'));
   //radiobutton
   int selectedRadioTile;
   int correct_answer = 0;
@@ -49,6 +52,9 @@ class QuizView extends QuizViewModel {
 
     preferences.setStringList("quizid", quizid);
     preferences.setStringList("quizNote", quizNote);
+
+    logger.i("getLocalData | quizid -> $quizid");
+    logger.i("getLocalData | quizNote -> $quizNote");
   }
 
   @override
@@ -142,15 +148,19 @@ class QuizView extends QuizViewModel {
                   future: getquiz(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
-                      print("logquiz 1 " + myquiz.toString());
+                      logger.i("body | snapshot.hasData true");
+
                       if (snapshot.data != null) {
-                        print("logquiz 2 " + myquiz.toString());
+                        logger.i("body | snapshot.hasData null değil");
+
                         if (myquiz.questionList.length == 0) {
-                          print("logquiz 3 " + myquiz.toString());
+                          logger.i(
+                              "body | questionList boş geliyor, bu konunun quizi yok");
+
                           return Center(
                               child: Text("Bu konunun quizi bulunmuyor."));
                         } else {
-                          print("logquiz 4 " + myquiz.toString());
+                          logger.i("body | quiz görüntülendi");
                           build_stapper();
                           return Stepper(
                             steps: steps,
@@ -203,21 +213,17 @@ class QuizView extends QuizViewModel {
   void calculate_points(int index) {
     if (myquiz.questionList[index].correct == selectedRadioTile) {
       correct_answer++;
-      print(myquiz.questionList[index].correct.toString() +
-          "            " +
-          selectedRadioTile.toString());
-      print(correct_answer);
+
+      logger.i("calculate_points | $correct_answer doğru cevap verildi.");
     } else {
       wrong_answer++;
-      print(myquiz.questionList[index].correct.toString() +
-          "            " +
-          selectedRadioTile.toString());
-      print(wrong_answer);
+      logger.i("calculate_points | $wrong_answer yanlış cevap verildi.");
     }
     selectedRadioTile = 0;
   }
 
   void build_stapper() {
+    logger.i("build_stepper | each step");
     for (var i = 0; i < 10; i++) {
       steps[i] = Step(
           isActive: true,
@@ -263,7 +269,6 @@ class QuizView extends QuizViewModel {
         style: TextStyle(fontSize: context.normalValue),
       ),
       onChanged: (val) {
-        print("Radio Tile pressed $val");
         setSelectedRadioTile(val);
       },
       activeColor: Colors.black,
@@ -294,21 +299,20 @@ class QuizView extends QuizViewModel {
       quizid.add(id);
       quizNote.add(note.toString());
     } catch (e) {
+      logger.e("setQuizNote_SP | quizid ye ulaşılamadı");
       preferences.setStringList("quizid", [""]);
       preferences.setStringList("quizNote", [""]);
       quizid = preferences.getStringList("quizid");
       quizNote = preferences.getStringList("quizNote");
       quizid.add(id);
       quizNote.add(note.toString());
+      logger.e("setQuizNote_SP | quizid ve quizNote oluşturuldu");
     }
 
     preferences.setStringList("quizid", quizid);
     preferences.setStringList("quizNote", quizNote);
 
-    print("quiznotesıralaması log/quiz view close butonu " + quizid.toString());
-    print(
-        "quiznotesıralaması log/quiz view close butonu " + quizNote.toString());
-
-    print(quizNote.length.toString() + "note uzunluğuu");
+    logger.i("setQuizNote_SP | yeni quizid -> $quizid");
+    logger.i("setQuizNote_SP | yeni quizNote -> $quizNote");
   }
 }

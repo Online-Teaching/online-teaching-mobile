@@ -1,17 +1,20 @@
 import 'package:circle_chart/circle_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/profile_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:step_progress_indicator/step_progress_indicator.dart';
 import 'package:toast/toast.dart';
 
 class ProfileView extends ProfileViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('profile_view.dart'));
   Size size;
 
   @override
@@ -22,14 +25,8 @@ class ProfileView extends ProfileViewModel {
 
   @override
   Widget build(BuildContext context) {
-    if (isExistQuiz == 2) {
-      print("quiz varrrr");
-    }
-    print("starın son hali" + star.toString());
-    print("myort son hali" + myort.toString());
-    print("note son hali" + myQuizNoteList.toString());
-
-    /////
+    logger.i("build");
+    logger.i("build | profile point-> $star");
 
     size = MediaQuery.of(context).size;
     return Container(
@@ -50,8 +47,8 @@ class ProfileView extends ProfileViewModel {
     quizid = preferences.getStringList("quizid");
     quizNote = preferences.getStringList("quizNote");
 
-    print("quiznotesıralaması log/quiz view  localdata " + quizNote.toString());
-    print("quiznotesıralaması log/quiz view  localdata " + quizid.toString());
+    logger.i("getLocalData | quizid -> $quizid");
+    logger.i("getLocalData | quizNote -> $quizNote");
   }
 
   Expanded appbar(Size size, BuildContext context) {
@@ -128,7 +125,6 @@ class ProfileView extends ProfileViewModel {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //star png
                     SizedBox(
                         width: 30,
                         height: 30,
@@ -157,29 +153,21 @@ class ProfileView extends ProfileViewModel {
                   child: FutureBuilder(
                 future: getSubjects(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  print("quiznotesıralaması log/quiz view  future içi " +
-                      quizNote.toString());
-                  for (var item in mySubjectList_service) {
-                    print("quiznotesıralaması log/quiz view  future içi " +
-                        item.id +
-                        "   " +
-                        item.title);
-                    print(
-                        "quiznotesıralaması   mySubjectList_service uzunluğuu  " +
-                            mySubjectList_service.length.toString());
-                    print("quiznotesıralaması   quizNote uzunluğuu  " +
-                        quizNote.length.toString());
-                  }
-
+                  logger.i("body | quizid -> $quizid");
+                  logger.i("body | quizNote -> $quizNote");
                   if (snapshot.hasData) {
-                    print("profile log data var");
+                    logger.i("body | snapshot.hasData true");
                     if (snapshot.hasData != null) {
-                      print("profile log data null değil");
+                      logger.i("body | snapshot.hasData null değil");
+
                       if (mySubjectList_service.length == 0) {
+                        logger.i(
+                            "body | mySubjectList_service.length=0 (çözülmüş quiz yok) ");
                         return Center(
                           child: Text("Henüz hiç Quiz çözmedin."),
                         );
                       } else {
+                        logger.i("body | listelenecek quiz sonucu var.");
                         return ListView.builder(
                             itemCount: quizid.length,
                             scrollDirection: Axis.vertical,
@@ -187,18 +175,20 @@ class ProfileView extends ProfileViewModel {
                               try {
                                 return testCard(
                                     mySubjectList_service[index], index);
-                              } catch (e) {}
+                              } catch (e) {
+                                logger.e("body | show ListView error");
+                              }
                             });
                       }
                     } else {
+                      logger.i("body | snapshot.hasData null");
                       return Center(
                         child: Text("quiz yok"),
                       );
                     }
                   } else {
-                    print("profile log" + snapshot.data.toString());
-                    print("profile log" +
-                        mySubjectList_service.length.toString());
+                    logger.i("body | snapshot.hasData false");
+
                     return Center(
                       child: CircularProgressIndicator(),
                     );
@@ -313,9 +303,7 @@ class ProfileView extends ProfileViewModel {
 
     api_category_url = category_url;
     api_sub_category_index = sub_category_url;
-
-    Toast.show(api_category_url + " ve " + api_sub_category_index, context,
-        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+    logger.i("create_url | id konusuna gidiliyor.");
   }
 
   isIntNumber(String char) {

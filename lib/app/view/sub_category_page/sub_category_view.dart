@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen_view.dart';
 import 'package:online_teaching_mobile/app/view_model/sub_category_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SubCategoryView extends SubCategoryViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('sub_category_view.dart'));
+
   /// genel değişmez bir liste olmalı shared preferences
   SharedPreferences preferences;
   List<String> bookmark_data = [];
@@ -23,7 +27,7 @@ class SubCategoryView extends SubCategoryViewModel {
     bookmark_data = preferences.getStringList("konuid");
     preferences.setStringList("konuid", bookmark_data);
 
-    print("//shared preferences");
+    logger.i("getLocalData | bookmark_data -> $bookmark_data");
   }
 
   isBookmark(String id) {
@@ -38,7 +42,7 @@ class SubCategoryView extends SubCategoryViewModel {
 
   @override
   Widget build(BuildContext context) {
-    print("//// sub category"); // mat kim gibi
+    logger.i("build");
     Size size = MediaQuery.of(context).size;
     return Container(
       color: Colors.white,
@@ -57,12 +61,12 @@ class SubCategoryView extends SubCategoryViewModel {
             future: getList(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
-                /// konu yoksa konu yok göster kesinlikle bu if içindes
-
+                logger.i("body | getList  snapshot.hasData true");
                 if (snapshot.hasData != null) {
-                  print("log 2 " + categories.length.toString());
+                  logger.i("body | getList  snapshot.hasData null değil");
                   if (categories.length == 0) {
-                    print("log 3 " + categories.length.toString());
+                    logger.i(
+                        "body | getList categories.length=0 (sun categorysi yok)");
                     return Scaffold(
                         body: Container(
                       margin: EdgeInsets.symmetric(horizontal: 50),
@@ -77,7 +81,6 @@ class SubCategoryView extends SubCategoryViewModel {
                       )),
                     ));
                   } else {
-                    print("log 4 " + categories.length.toString());
                     return ListView.builder(
                         itemCount: categories.length,
                         scrollDirection: Axis.vertical,
@@ -86,9 +89,7 @@ class SubCategoryView extends SubCategoryViewModel {
                   }
                 }
               }
-              // yüklenme anı
-
-              print("log    " + categories.toString());
+              logger.i("body | data bekleniyor... ");
               return Center(child: CircularProgressIndicator());
             }),
       ),
@@ -122,6 +123,7 @@ class SubCategoryView extends SubCategoryViewModel {
                 onPressed: () {
                   setState(() {
                     bookmark_data = preferences.getStringList("konuid");
+                    logger.i("body | bookmark_data -> $bookmark_data ");
 
                     try {
                       if (bookmark_data.contains(category.id)) {
@@ -130,16 +132,15 @@ class SubCategoryView extends SubCategoryViewModel {
                         bookmark_data.add(category.id);
                       }
                     } catch (e) {
+                      logger.e("body | bookmark_data'ya ulaşılamadı ");
                       preferences.setStringList("konuid", [""]);
                       bookmark_data = preferences.getStringList("konuid");
                       bookmark_data.add(category.id);
+                      logger.e("body | bookmark_data oluşturuldu");
                     }
 
                     preferences.setStringList("konuid", bookmark_data);
                   });
-                  print("dataaa" + bookmark_data.toString());
-
-                  /// her basıldığında set state yapmalı
                 },
               ),
               title: Text(category.title.toUpperCase()),

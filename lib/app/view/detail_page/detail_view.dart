@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view_model/detail_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:toast/toast.dart';
 
 //Category category = new Category();
 
 class DetailView extends DetailViewModel {
-  String metin = """
-  Access'in önceki sürümlerinde, Not veri türü metin büyük miktarlardaki depolamak için kullandık ve daha kısa dizeleri (en çok 255 karakter) depolamak için metin verileri yazın. Access 2013 ve Access 2016, bu iki veri türleri sırasıyla "Uzun metin" ve "Kısa metin" olarak yeniden olmuştur ve farklı özellikleri ve Masaüstü veritabanındaki veya Access web uygulaması kullanmakta olduğunuz bağlı olarak boyutu sınırları sahiptir. Ayrıntılar şöyledir:
-  Access'in önceki sürümlerinde, Not veri türü metin büyük miktarlardaki depolamak için kullandık ve daha kısa dizeleri (en çok 255 karakter) depolamak için metin verileri yazın. Access 2013 ve Access 2016, bu iki veri türleri sırasıyla "Uzun metin" ve "Kısa metin" olarak yeniden olmuştur ve farklı özellikleri ve Masaüstü veritabanındaki veya Access web uygulaması kullanmakta olduğunuz bağlı olarak boyutu sınırları sahiptir. Ayrıntılar şöyledir:
-  Access'in önceki sürümlerinde, Not veri türü metin büyük miktarlardaki depolamak için kullandık ve daha kısa dizeleri (en çok 255 karakter) depolamak için metin verileri yazın. Access 2013 ve Access 2016, bu iki veri türleri sırasıyla "Uzun metin" ve "Kısa metin" olarak yeniden olmuştur ve farklı özellikleri ve Masaüstü veritabanındaki veya Access web uygulaması kullanmakta olduğunuz bağlı olarak boyutu sınırları sahiptir. Ayrıntılar şöyledir:
-  """;
+  final logger = Logger(printer: SimpleLogPrinter('detail_view.dart'));
   Size size;
   @override
   Widget build(BuildContext context) {
-    // category = ModalRoute.of(context).settings.arguments;
+    logger.i("build");
     size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
@@ -100,25 +98,26 @@ class DetailView extends DetailViewModel {
                         future: getSingleCategory(),
                         builder: getSingleCategory() != null
                             ? (BuildContext context, AsyncSnapshot snapshot) {
+                                logger.i("getSingleCategory null değil");
                                 if (!snapshot.hasData) {
+                                  logger.i(
+                                      "getSingleCategory | snapshot.hasData null değil");
                                   return Center(
                                       child: CircularProgressIndicator());
                                 } //CIRCULAR INDICATOR
                                 else {
-                                  print("hello");
-                                  print(category.summary);
                                   return Text(category.summary != null
                                       ? category.summary
-                                      : "default");
+                                      : "");
                                 }
                               }
                             : (BuildContext context, AsyncSnapshot snapshot) {
+                                logger.i("getSingleCategory null geliyor");
                                 return Center(
                                     child: CircularProgressIndicator());
                               }),
                   ),
                 )),
-            //button
             SizedBox(
               width: size.width,
               height: size.height * 0.08,

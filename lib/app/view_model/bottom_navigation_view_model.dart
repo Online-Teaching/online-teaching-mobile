@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/service/category_names_service.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategoryName.dart';
 import 'package:online_teaching_mobile/app/view/bottom_navigation_page/bottom_navigation.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class BottomNavigationViewModel extends State<BottomNavigation>
     with BaseViewModel {
+  final logger =
+      Logger(printer: SimpleLogPrinter('bottom_navigation_view_model.dart'));
   bool isLoading = false;
   List<String> b_categories_name = [];
   ICategoryNameService categoryservice;
@@ -42,12 +46,14 @@ abstract class BottomNavigationViewModel extends State<BottomNavigation>
 
   Future<void> getList2() async {
     b_categories_name = await categoryservice.getCategoriesNameList();
+    logger.i("getNames | kategori isimleri döndürüldü");
     return b_categories_name;
   }
 
-  List<String> getNames() {
+/*  List<String> getNames() {
+    logger.i("getNames | kategori isimleri döndürüldü");
     return b_categories_name;
-  }
+  }*/
 
   Future<void> getQuizIdandQuizNote() async {
     try {
@@ -60,7 +66,7 @@ abstract class BottomNavigationViewModel extends State<BottomNavigation>
       }
       ort = sum / (myQuizNoteList.length - 1);
       star = (ort / 20);
-      print("taaaarrrr" + star.toString());
+      logger.i("getQuizIdandQuizNote | user star -> $star");
       return ort;
     } catch (e) {}
     star = 0;

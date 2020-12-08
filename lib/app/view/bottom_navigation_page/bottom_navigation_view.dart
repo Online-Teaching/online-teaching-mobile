@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/view/bookmark_page/bookmark.dart';
 import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
 import 'package:online_teaching_mobile/app/view/home_page/home.dart';
 import 'package:online_teaching_mobile/app/view/profile_page/profile.dart';
 import 'package:online_teaching_mobile/app/view_model/bottom_navigation_view_model.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 
 class BottomNavigationView extends BottomNavigationViewModel {
+  final logger =
+      Logger(printer: SimpleLogPrinter('bottom_navigation_view.dart'));
   int _currentindex = 1;
 
   @override
   Widget build(BuildContext context) {
+    logger.i("build");
     getQuizIdandQuizNote();
-    print("bottom navigation çalıştı");
-    List<String> sss = b_categories_name;
+    // List<String> sss = b_categories_name;
     final tabs = [Bookmark(), Home(), Profile()];
     return Scaffold(
       body: tabs[_currentindex],

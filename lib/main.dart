@@ -1,13 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
-import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
-import 'package:online_teaching_mobile/app/view/quiz_page/quiz_view.dart';
-import 'package:online_teaching_mobile/app/view/sub_category_page/sub_category.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:logger/logger.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'app/view/bottom_navigation_page/bottom_navigation.dart';
-import 'app/view/login_page/login.dart';
 import 'app/view/splash_screen/splash_screen.dart';
 import 'core/constant/locale_keys.dart';
 import 'core/init/cache/local_manager.dart';
@@ -17,10 +11,12 @@ import 'core/init/navigation/navigation_route.dart';
 void main() => runApp(MyApp());
 
 int initScreen;
+final logger = Logger(printer: SimpleLogPrinter('main.dart'));
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    logger.i("build");
     return new MaterialApp(
       home: Splash(),
       onGenerateRoute: NavigationRoute.instance.generateRoute,
@@ -28,22 +24,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-/*
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Material App',
-      home: Splash(),
-      onGenerateRoute: NavigationRoute.instance.generateRoute,
-      navigatorKey: NavigationService.instance.navigatorKey,
-    );
-  }
-}
-
-
-*/
 
 Widget getView() {
   String data = LocaleManager.instance.getStringValue(PreferencesKeys.TOKEN);

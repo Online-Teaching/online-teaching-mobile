@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
@@ -8,22 +9,24 @@ import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/bookmark_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 class BookmarkView extends BookmarkViewModel {
+  final logger = Logger(printer: SimpleLogPrinter('bookmark_view.dart'));
   SharedPreferences preferences;
   List<String> myBookMarkList = [];
   List<Subject> mySubjectList = [];
   BookMarkSubCategory g_category;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    logger.i("build");
     Size size = MediaQuery.of(context).size;
     return Container(
       child: Column(
@@ -41,8 +44,11 @@ class BookmarkView extends BookmarkViewModel {
             future: getSubjects(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
+                logger.i("build | getSubjects.hasData true ");
                 if (snapshot.hasData != null) {
+                  logger.i("build | getSubjects.hasData null değil ");
                   if (mySubjectList_service.length == 0) {
+                    logger.i("build | listelenecek konu yok ");
                     return Scaffold(
                         body: Container(
                       margin: EdgeInsets.symmetric(horizontal: 50),
@@ -65,6 +71,7 @@ class BookmarkView extends BookmarkViewModel {
                   }
                 }
               } else {
+                logger.i("build | getSubjects.hasData false geliyor ");
                 return Center(child: CircularProgressIndicator());
               }
             }),
@@ -149,10 +156,8 @@ class BookmarkView extends BookmarkViewModel {
 
     api_category_url = category_url;
     api_sub_category_index = sub_category_url;
+    logger.i("create_url | $id konusuna gidiliyor.");
     getSingleCategory();
-
-    Toast.show(api_category_url + " ve " + api_sub_category_index, context,
-        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
   }
 }
 
