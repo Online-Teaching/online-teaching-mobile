@@ -25,7 +25,7 @@ abstract class SplashViewModel extends State<Splash> with BaseViewModel {
         Duration(
           seconds: 3,
         ), () {
-      print("splash");
+      logger.i("splash");
     });
   }
 
