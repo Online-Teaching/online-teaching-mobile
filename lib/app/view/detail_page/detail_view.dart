@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view_model/detail_view_model.dart';
+import 'package:online_teaching_mobile/core/component/appbar.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
+import 'package:online_teaching_mobile/main.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:toast/toast.dart';
 
@@ -18,60 +20,38 @@ class DetailView extends DetailViewModel {
     size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
-        children: [appbar(size, context), body()],
-      ),
-    );
-  }
-
-  Expanded appbar(Size size, BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(
-          top: 30,
-          left: 20,
-          right: 20,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              //offset: Offset(0, 1),
-              blurRadius: 10,
-              //  color: Colors.blue.withOpacity(0.23),
+        children: [
+          MyAppBar(
+            flex: 2,
+            radius: 30,
+            f: FutureBuilder(
+              future: getSingleCategory(),
+              builder: getSingleCategory() == null
+                  ? (context, snapshot) {
+                      return Text('-');
+                    }
+                  : (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          category.title.toUpperCase(),
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Text('-');
+                      }
+                    },
             ),
-          ],
-        ),
-        child: FutureBuilder(
-          future: getSingleCategory(),
-          builder: getSingleCategory() == null
-              ? (context, snapshot) {
-                  return Text('-');
-                }
-              : (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      category.title.toUpperCase(),
-                      style: Theme.of(context).textTheme.headline5.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    );
-                  } else {
-                    return Text('-');
-                  }
-                },
-        ),
+          ),
+          body()
+        ],
       ),
     );
   }
 
   Expanded body() {
     return Expanded(
-      flex: 11,
+      flex: 13,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

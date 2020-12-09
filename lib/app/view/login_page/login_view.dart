@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/view_model/login_view_model.dart';
+import 'package:online_teaching_mobile/core/component/round_button.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 
@@ -90,26 +91,12 @@ class LoginView extends LoginViewModel {
                   height: 12,
                 ),
                 Container(
-                  height: 50,
-                  width: double.infinity,
-                  margin: EdgeInsets.only(left: 40, right: 40),
-                  child: FlatButton(
-                    onPressed: () {
+                  child: AppButton(
+                    text: "Giriş Yap",
+                    onpressed: () {
                       navigation.navigateToPage(
-                          path: NavigationConstants.BOTTOM_NAVIGATION,
-                          data: 20);
+                          path: NavigationConstants.BOTTOM_NAVIGATION);
                     },
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Text(
-                      "Giriş Yap",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
                   ),
                 ),
                 SizedBox(

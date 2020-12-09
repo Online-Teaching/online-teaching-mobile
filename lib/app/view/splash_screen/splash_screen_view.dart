@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view_model/splash_screen_view_model.dart';
+import 'package:online_teaching_mobile/core/component/round_button.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
@@ -61,29 +62,22 @@ class SplashView extends SplashViewModel {
                       .copyWith(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
                 Lottie.asset('assets/lottie_json/student1.json'),
-                SizedBox(
-                  width: context.width * 0.8,
-                  height: context.height * 0.08,
-                  child: FlatButton(
-                    color: Colors.red,
-                    child: Text(
-                      "Başla",
-                      style: TextStyle(
-                          fontSize: context.mediumValue, color: Colors.white),
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(context.mediumValue),
-                    ),
-                    onPressed: () {
-                      navigation.navigateToPage(
-                          path: NavigationConstants.LOGIN);
-                    },
-                  ),
-                )
+                round_button(context)
               ],
             )),
           ],
         ),
+      ),
+    );
+  }
+
+  Container round_button(BuildContext context) {
+    return Container(
+      child: AppButton(
+        text: "Başla",
+        onpressed: () {
+          navigation.navigateToPage(path: NavigationConstants.LOGIN);
+        },
       ),
     );
   }

@@ -4,6 +4,8 @@ import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen_view.dart';
 import 'package:online_teaching_mobile/app/view_model/sub_category_view_model.dart';
+import 'package:online_teaching_mobile/core/component/appbar.dart';
+import 'package:online_teaching_mobile/core/component/sub_category.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
@@ -19,6 +21,25 @@ class SubCategoryView extends SubCategoryViewModel {
   void initState() {
     super.initState();
     getLocalData();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    logger.i("build");
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          MyAppBar(
+            flex: 2,
+            text: "Konular",
+            radius: 30,
+          ),
+          body()
+        ],
+      ),
+    );
   }
 
   Future getLocalData() async {
@@ -40,21 +61,9 @@ class SubCategoryView extends SubCategoryViewModel {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    logger.i("build");
-    Size size = MediaQuery.of(context).size;
-    return Container(
-      color: Colors.white,
-      child: Column(
-        children: [appbar(size, context), body()],
-      ),
-    );
-  }
-
   Expanded body() {
     return Expanded(
-      flex: 11,
+      flex: 13,
       child: Container(
         margin: EdgeInsets.only(top: 5),
         child: FutureBuilder(
@@ -96,94 +105,49 @@ class SubCategoryView extends SubCategoryViewModel {
     );
   }
 
-  Container categoryCard(
-    Category category,
-    int index,
-  ) =>
-      Container(
-          margin: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-          decoration: BoxDecoration(
-            color: Colors.blueGrey[100],
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15),
-              bottomRight: Radius.circular(15),
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15),
-            ),
+  Container categoryCard(Category category, int index) => Container(
+        child: AppSubCategoryCard(
+          listTile: ListTile(
+            leading: iconButtonBookmarkLogic(category),
+            title: Text(category.title.toUpperCase()),
+            onTap: () {
+              setState(() {
+                api_sub_category_index = index.toString();
+                navigation.navigateToPage(
+                    path: NavigationConstants.DETAIL_VIEW, data: category);
+              });
+            },
           ),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: ListTile(
-              leading: IconButton(
-                icon: isBookmark(category.id)
-                    ? Icon(Icons.bookmark)
-                    : Icon(Icons.bookmark_border),
-                onPressed: () {
-                  setState(() {
-                    bookmark_data = preferences.getStringList("konuid");
-                    logger.i("body | bookmark_data -> $bookmark_data ");
-
-                    try {
-                      if (bookmark_data.contains(category.id)) {
-                        bookmark_data.remove(category.id);
-                      } else {
-                        bookmark_data.add(category.id);
-                      }
-                    } catch (e) {
-                      logger.e("body | bookmark_data'ya ulaşılamadı ");
-                      preferences.setStringList("konuid", [""]);
-                      bookmark_data = preferences.getStringList("konuid");
-                      bookmark_data.add(category.id);
-                      logger.e("body | bookmark_data oluşturuldu");
-                    }
-
-                    preferences.setStringList("konuid", bookmark_data);
-                  });
-                },
-              ),
-              title: Text(category.title.toUpperCase()),
-              onTap: () {
-                setState(() {
-                  api_sub_category_index = index.toString();
-
-                  /// go to detail view
-                  navigation.navigateToPage(
-                      path: NavigationConstants.DETAIL_VIEW, data: category);
-                });
-              },
-            ),
-          ));
-
-  Expanded appbar(Size size, BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(top: 30, left: 20, right: 20),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              //offset: Offset(0, 1),
-              blurRadius: 10,
-              //  color: Colors.blue.withOpacity(0.23),
-            ),
-          ],
         ),
-        child: Text(
-          "Konular",
-          style: Theme.of(context)
-              .textTheme
-              .headline5
-              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
+      );
+
+  IconButton iconButtonBookmarkLogic(Category category) {
+    return IconButton(
+      icon: isBookmark(category.id)
+          ? Icon(Icons.bookmark)
+          : Icon(Icons.bookmark_border),
+      onPressed: () {
+        setState(() {
+          bookmark_data = preferences.getStringList("konuid");
+          logger.i("body | bookmark_data -> $bookmark_data ");
+
+          try {
+            if (bookmark_data.contains(category.id)) {
+              bookmark_data.remove(category.id);
+            } else {
+              bookmark_data.add(category.id);
+            }
+          } catch (e) {
+            logger.e("body | bookmark_data'ya ulaşılamadı ");
+            preferences.setStringList("konuid", [""]);
+            bookmark_data = preferences.getStringList("konuid");
+            bookmark_data.add(category.id);
+            logger.e("body | bookmark_data oluşturuldu");
+          }
+
+          preferences.setStringList("konuid", bookmark_data);
+        });
+      },
     );
   }
 }
