@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/home_view_model.dart';
-import 'package:online_teaching_mobile/core/component/appbar.dart';
 import 'package:online_teaching_mobile/core/component/appbar_with_stack.dart';
 import 'package:online_teaching_mobile/core/component/category_card.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
@@ -32,10 +31,13 @@ class HomeView extends HomeViewModel {
     return Expanded(
         flex: 6,
         child: Container(
-          margin: EdgeInsets.only(top: 5),
+          margin: EdgeInsets.only(
+              top: context.lowValue,
+              left: context.normalValue,
+              right: context.normalValue),
           child: FutureBuilder(
-              future: getList2(),
-              builder: getList2() == null
+              future: getCategoriesNameList(),
+              builder: getCategoriesNameList() == null
                   ? Center(child: CircularProgressIndicator())
                   : (BuildContext context, AsyncSnapshot snapshot) {
                       return ListView.builder(
@@ -54,7 +56,7 @@ class HomeView extends HomeViewModel {
         children: <Widget>[
           MyAppBarWithStack(
             text: "Kategoriler ",
-            radius: 60,
+            radius: context.highValue * 0.8,
           ),
           Positioned(
             bottom: 0,
@@ -98,7 +100,7 @@ class HomeView extends HomeViewModel {
                 ],
               ),
             ),
-          ),
+          )
         ],
       ),
     );

@@ -1,19 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
-import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/bookmark_view_model.dart';
 import 'package:online_teaching_mobile/core/component/appbar.dart';
 import 'package:online_teaching_mobile/core/component/sub_category.dart';
-import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class BookmarkView extends BookmarkViewModel {
   final logger = Logger(printer: SimpleLogPrinter('bookmark_view.dart'));
@@ -29,7 +25,6 @@ class BookmarkView extends BookmarkViewModel {
   @override
   Widget build(BuildContext context) {
     logger.i("build");
-    Size size = MediaQuery.of(context).size;
     return Container(
       child: Column(
         children: [
@@ -48,7 +43,7 @@ class BookmarkView extends BookmarkViewModel {
     return Expanded(
       flex: 13,
       child: Container(
-        margin: EdgeInsets.only(top: 5),
+        margin: EdgeInsets.only(top: context.lowValue),
         child: FutureBuilder(
             future: getSubjects(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -60,7 +55,8 @@ class BookmarkView extends BookmarkViewModel {
                     logger.i("build | listelenecek konu yok ");
                     return Scaffold(
                         body: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: context.mediumValue),
                       child: Center(
                           child: Text(
                         "Kaydedilen konu bulunmuyor.",

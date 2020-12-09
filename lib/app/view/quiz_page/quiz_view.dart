@@ -7,7 +7,7 @@ import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class QuizView extends QuizViewModel {
   final logger = Logger(printer: SimpleLogPrinter('quiz_view.dart'));

@@ -13,12 +13,13 @@ abstract class BottomNavigationViewModel extends State<BottomNavigation>
   final logger =
       Logger(printer: SimpleLogPrinter('bottom_navigation_view_model.dart'));
   bool isLoading = false;
+  //category
   List<String> b_categories_name = [];
   ICategoryNameService categoryservice;
 
-  /// quiz
+  /// shared preferences
   SharedPreferences preferences;
-
+  // quiz
   List<String> myQuizIdList = [];
   List<String> myQuizNoteList = [];
   double ort;
@@ -44,16 +45,11 @@ abstract class BottomNavigationViewModel extends State<BottomNavigation>
     });
   }
 
-  Future<void> getList2() async {
+  Future<void> getNameList() async {
     b_categories_name = await categoryservice.getCategoriesNameList();
-    logger.i("getNames | kategori isimleri döndürüldü");
+    logger.i("getNameList | kategori isimleri döndürüldü");
     return b_categories_name;
   }
-
-/*  List<String> getNames() {
-    logger.i("getNames | kategori isimleri döndürüldü");
-    return b_categories_name;
-  }*/
 
   Future<void> getQuizIdandQuizNote() async {
     try {

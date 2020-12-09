@@ -1,7 +1,6 @@
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/api/API.dart';
-import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'dart:convert';
 import 'api/apiUrl.dart';

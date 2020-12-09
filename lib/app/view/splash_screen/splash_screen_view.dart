@@ -4,9 +4,8 @@ import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view_model/splash_screen_view_model.dart';
 import 'package:online_teaching_mobile/core/component/round_button.dart';
-import 'package:online_teaching_mobile/core/constant/app_constant.dart';
-import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 
 List<String> isBookmarkList = [""];

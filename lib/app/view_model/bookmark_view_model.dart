@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/category_names_service.dart';
-import 'package:online_teaching_mobile/app/service/category_page_service.dart';
-import 'package:online_teaching_mobile/app/service/interfaces/ICategory.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategoryName.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ISubject.dart';
 import 'package:online_teaching_mobile/app/service/subject_service.dart';
@@ -17,12 +14,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class BookmarkViewModel extends State<Bookmark> with BaseViewModel {
   final logger = Logger(printer: SimpleLogPrinter('bookmark_view_model.dart'));
 
-  ///
+  /// shared preferences
   SharedPreferences preferences;
   List<String> myBookMarkList = [];
   List<Subject> mySubjectList_service = [];
 
-/////
+  ///// subjects
   bool isLoading = false;
   List<Subject> subjects = [];
   ISubjecteService subjecteService;
