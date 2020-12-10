@@ -24,7 +24,7 @@ abstract class HomeViewModel extends State<Home> with BaseViewModel {
   ISubjecteService subjecteService;
 
   // single category
-  ICategoryNameService categoryService;
+  ICategoryNameService singlecategoryService;
   Category category;
 
   @override
@@ -32,7 +32,7 @@ abstract class HomeViewModel extends State<Home> with BaseViewModel {
     super.initState();
     subjecteService = SubjectService.instance;
     categoryservice = CategoryNameService.instance;
-    categoryService = CategoryNameService.instance;
+    singlecategoryService = CategoryNameService.instance;
   }
 
   @override
@@ -80,7 +80,7 @@ abstract class HomeViewModel extends State<Home> with BaseViewModel {
   }
 
   Future<void> getSingleCategory() async {
-    category = await categoryService.getSingleCategory();
+    category = await singlecategoryService.getSingleCategory();
     String name = category.title;
     logger.i("getSingleCategory | $name konusuna gidiliyor");
     return category;

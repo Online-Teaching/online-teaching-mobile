@@ -14,7 +14,6 @@ class HomeView extends HomeViewModel {
   @override
   Icon icon = Icon(Icons.bookmark_border);
   int _selectedIndex;
-  Subject gotothisSubject;
   @override
   Widget build(BuildContext context) {
     getSubjects();
@@ -67,7 +66,7 @@ class HomeView extends HomeViewModel {
             right: 0,
             child: Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 15),
+              margin: EdgeInsets.symmetric(horizontal: context.width * 0.07),
               padding: EdgeInsets.symmetric(horizontal: 10),
               height: 54,
               decoration: BoxDecoration(
@@ -81,26 +80,39 @@ class HomeView extends HomeViewModel {
                   ),
                 ],
               ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: Text("ffff"),
-                    ),
+              child: InkWell(
+                onTap: () {
+                  this.setState(() {
+                    showSearch(
+                        context: context,
+                        delegate:
+                            DataSearch(subjects, subjects_string, navigation));
+                  });
+                },
+                child: Container(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(left: 10),
+                          child: Text("Konu Ara"),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        color: Colors.black,
+                        onPressed: () {
+                          this.setState(() {
+                            showSearch(
+                                context: context,
+                                delegate: DataSearch(
+                                    subjects, subjects_string, navigation));
+                          });
+                        },
+                      )
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(Icons.search),
-                    color: Colors.black,
-                    onPressed: () {
-                      this.setState(() {
-                        showSearch(
-                            context: context,
-                            delegate: DataSearch(
-                                subjects, subjects_string, navigation));
-                      });
-                    },
-                  )
-                ],
+                ),
               ),
             ),
           )
@@ -158,7 +170,11 @@ class DataSearch extends SearchDelegate<String> {
   }
 
   @override
-  Widget buildResults(BuildContext context) {}
+  Widget buildResults(BuildContext context) {
+    return Center(
+      child: Text("Lütfen konu seçiniz"),
+    );
+  }
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -214,7 +230,8 @@ class DataSearch extends SearchDelegate<String> {
 
     api_category_url = category_url;
     api_sub_category_index = sub_category_url;
-    //  getSingleCategory();
+    Hello h = new Hello();
+    h.getSingleCategory();
   }
 }
 
@@ -224,5 +241,19 @@ isIntNumber(String char) {
     return true;
   } else {
     return false;
+  }
+}
+
+class Hello extends HomeViewModel {
+  @override
+  Future<void> getSingleCategory() {
+    // TODO: implement getSingleCategory
+    return super.getSingleCategory();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    throw UnimplementedError();
   }
 }
