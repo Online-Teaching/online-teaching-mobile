@@ -17,7 +17,6 @@ class BottomNavigationView extends BottomNavigationViewModel {
   @override
   Widget build(BuildContext context) {
     logger.i("build");
-    logger.e(userdisplayname);
     getQuizIdandQuizNote();
     final tabs = [Bookmark(), Home(), Profile()];
     return WillPopScope(
