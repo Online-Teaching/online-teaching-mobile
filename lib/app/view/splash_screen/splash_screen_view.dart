@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view_model/splash_screen_view_model.dart';
 import 'package:online_teaching_mobile/core/component/round_button.dart';
+import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
@@ -12,6 +14,36 @@ List<String> isBookmarkList = [""];
 
 class SplashView extends SplashViewModel {
   final logger = Logger(printer: SimpleLogPrinter('splash_screen_view.dart'));
+  bool login = true;
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
+  GoogleSignInAccount _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      if (_googleSignIn != null) {
+        _googleSignIn.onCurrentUserChanged
+            .listen((GoogleSignInAccount account) {
+          setState(() {
+            _currentUser = account;
+          });
+          if (_currentUser != null) {
+            //_handleGetContact();
+            login = false;
+          } else {
+            login = true;
+          }
+        });
+        _googleSignIn.signInSilently();
+      }
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     logger.i("build");
@@ -75,7 +107,14 @@ class SplashView extends SplashViewModel {
       child: AppButton(
         text: "Başla",
         onpressed: () {
-          navigation.navigateToPage(path: NavigationConstants.LOGIN);
+          if (login) {
+            navigation.navigateToPageClear(path: NavigationConstants.LOGIN);
+          } else {
+            userdisplayname = _currentUser.displayName;
+            userphotourl = _currentUser.photoUrl;
+            navigation.navigateToPageClear(
+                path: NavigationConstants.BOTTOM_NAVIGATION);
+          }
         },
       ),
     );

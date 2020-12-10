@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
@@ -7,19 +8,15 @@ import 'package:online_teaching_mobile/core/component/appbar_with_stack.dart';
 import 'package:online_teaching_mobile/core/component/quiz_result_card.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:toast/toast.dart';
 
 class ProfileView extends ProfileViewModel {
   final logger = Logger(printer: SimpleLogPrinter('profile_view.dart'));
-
-  @override
-  void initState() {
-    super.initState();
-    getLocalData();
-  }
-
+  bool exitButtonVisible = true;
   @override
   Widget build(BuildContext context) {
     logger.i("build");
@@ -46,6 +43,52 @@ class ProfileView extends ProfileViewModel {
     logger.i("getLocalData | quizNote -> $quizNote");
   }
 
+//// current user
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
+  GoogleSignInAccount _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalData();
+    try {
+      if (_googleSignIn != null) {
+        _googleSignIn.onCurrentUserChanged
+            .listen((GoogleSignInAccount account) {
+          setState(() {
+            _currentUser = account;
+          });
+          if (_currentUser != null) {
+            //_handleGetContact();
+
+          } else {}
+        });
+        _googleSignIn.signInSilently();
+      } else {}
+    } catch (e) {}
+  }
+
+  Future<void> _handleSignIn() async {
+    setState(() {});
+
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _handleSignOut() {
+    try {
+      _googleSignIn.disconnect();
+      _googleSignIn = null;
+    } catch (e) {}
+  }
+
   Expanded appbar(BuildContext context) {
     return Expanded(
       flex: 2,
@@ -59,8 +102,39 @@ class ProfileView extends ProfileViewModel {
               alignment: Alignment.center,
               children: <Widget>[
                 MyAppBarWithStack(
-                  text: "Eda Ersu",
+                  text:
+                      _currentUser != null ? _currentUser.displayName : "Hey !",
                   radius: context.highValue,
+                ),
+                Positioned(
+                  right: context.lowValue,
+                  top: context.mediumValue,
+                  child: SizedBox(
+                    width: context.highValue * 0.6,
+                    child: Visibility(
+                      visible: _currentUser == null ? false : exitButtonVisible,
+                      child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.exit_to_app,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              exitButtonVisible = false;
+
+                              try {
+                                String email = _currentUser.email;
+                                Toast.show(
+                                    "$email hesabından çıkış yapıldı.", context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.BOTTOM);
+                              } catch (e) {}
+                              _handleSignOut();
+                            });
+                          }),
+                    ),
+                  ),
                 ),
                 Positioned(
                   bottom: -context.highValue,
@@ -68,11 +142,14 @@ class ProfileView extends ProfileViewModel {
                       width: context.width * 0.4,
                       height: context.width * 0.4,
                       child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.white,
-                        backgroundImage: NetworkImage(
-                            'https://image.freepik.com/vecteurs-libre/robot-mignon-prendre-selfie-photo-icone-isole-fond-bleu-intelligence-artificielle-technologie-moderne_48369-13410.jpg'),
-                      )),
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          backgroundImage: _currentUser != null
+                              ? (_currentUser.photoUrl == null
+                                  ? AssetImage(
+                                      'assets/images/default_photo.png')
+                                  : NetworkImage(_currentUser.photoUrl))
+                              : AssetImage('assets/images/default_photo.png'))),
                 ),
                 Positioned(
                   bottom: -(context.highValue + 30),

@@ -122,7 +122,7 @@ class DetailView extends DetailViewModel {
                   ),
                 ),
                 onPressed: () {
-                  navigation.navigateToPageClear(
+                  navigation.navigateToPage(
                       path: NavigationConstants.QUIZ_VIEW);
                 },
               ),

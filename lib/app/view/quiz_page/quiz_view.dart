@@ -43,50 +43,7 @@ class QuizView extends QuizViewModel {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: scaffoldWidget(context),
-        onWillPop: () {
-          return showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Confirm Exit"),
-                  content: Text("Are you sure you want to exit?"),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("YES"),
-                      onPressed: () {
-                        SystemNavigator.pop();
-                      },
-                    ),
-                    FlatButton(
-                      child: Text("NO"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                );
-              });
-          return Future.value(true);
-        });
-  }
-
-  Future getLocalData() async {
-    preferences = await SharedPreferences.getInstance();
-    quizid = preferences.getStringList("quizid");
-    quizNote = preferences.getStringList("quizNote");
-
-    preferences.setStringList("quizid", quizid);
-    preferences.setStringList("quizNote", quizNote);
-
-    logger.i("getLocalData | quizid -> $quizid");
-    logger.i("getLocalData | quizNote -> $quizNote");
-  }
-
-  Scaffold scaffoldWidget(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -107,6 +64,18 @@ class QuizView extends QuizViewModel {
           ),
         ),
         body: quizViewWidget());
+  }
+
+  Future getLocalData() async {
+    preferences = await SharedPreferences.getInstance();
+    quizid = preferences.getStringList("quizid");
+    quizNote = preferences.getStringList("quizNote");
+
+    preferences.setStringList("quizid", quizid);
+    preferences.setStringList("quizNote", quizNote);
+
+    logger.i("getLocalData | quizid -> $quizid");
+    logger.i("getLocalData | quizNote -> $quizNote");
   }
 
   Column quizViewWidget() {
