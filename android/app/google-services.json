@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "665292330800",
+    "project_id": "auth-deneme-63ae8",
+    "storage_bucket": "auth-deneme-63ae8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665292330800:android:03f4c200eb88748c1ddaf5",
+        "android_client_info": {
+          "package_name": "com.example.online_teaching_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665292330800-jcmeo2kdoun2ci9b3tp1g6169crlo47v.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.online_teaching_mobile",
+            "certificate_hash": "bdaaa17a1cc718ddef90bf04ece722fd42a3eef3"
+          }
+        },
+        {
+          "client_id": "665292330800-kcdk1jtllaj43do64hk3iderivt27u0v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAmP8ei_kDn881vZmmhVhG2UFLl2iQS3Pw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665292330800-kcdk1jtllaj43do64hk3iderivt27u0v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

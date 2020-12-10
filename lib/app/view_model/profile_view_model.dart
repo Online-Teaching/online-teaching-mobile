@@ -8,7 +8,6 @@ import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
 
 abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
   final logger = Logger(printer: SimpleLogPrinter('profile_view_model.dart'));
@@ -19,7 +18,7 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
   double myort;
   int isExistQuiz;
 
-/////
+  ///// subjects
   bool isLoading = false;
   List<Subject> subjects = [];
   ISubjecteService subjecteService;

@@ -2,7 +2,6 @@ import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/quiz_model.dart';
 import 'package:online_teaching_mobile/app/service/api/API.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/IQuestion.dart';
-import 'package:online_teaching_mobile/app/view/quiz_page/quiz.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:online_teaching_mobile/core/logger/logger.dart';

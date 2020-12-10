@@ -1,126 +1,114 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/view_model/detail_view_model.dart';
+import 'package:online_teaching_mobile/core/component/appbar.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:toast/toast.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 //Category category = new Category();
 
 class DetailView extends DetailViewModel {
   final logger = Logger(printer: SimpleLogPrinter('detail_view.dart'));
-  Size size;
   @override
   Widget build(BuildContext context) {
     logger.i("build");
-    size = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
-        children: [appbar(size, context), body()],
-      ),
-    );
-  }
-
-  Expanded appbar(Size size, BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(
-          top: 30,
-          left: 20,
-          right: 20,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(30),
-            bottomRight: Radius.circular(30),
-          ),
-          boxShadow: [
-            BoxShadow(
-              //offset: Offset(0, 1),
-              blurRadius: 10,
-              //  color: Colors.blue.withOpacity(0.23),
+        children: [
+          MyAppBar(
+            flex: 2,
+            radius: context.mediumValue,
+            f: FutureBuilder(
+              future: getSingleCategory(),
+              builder: getSingleCategory() == null
+                  ? (context, snapshot) {
+                      return Text('-');
+                    }
+                  : (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(
+                          category.title.toUpperCase(),
+                          style: Theme.of(context).textTheme.headline5.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return Text('-');
+                      }
+                    },
             ),
-          ],
-        ),
-        child: FutureBuilder(
-          future: getSingleCategory(),
-          builder: getSingleCategory() == null
-              ? (context, snapshot) {
-                  return Text('-');
-                }
-              : (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      category.title.toUpperCase(),
-                      style: Theme.of(context).textTheme.headline5.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    );
-                  } else {
-                    return Text('-');
-                  }
-                },
-        ),
+          ),
+          body()
+        ],
       ),
     );
   }
 
   Expanded body() {
     return Expanded(
-      flex: 11,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(20),
-                height: size.height,
+      flex: 13,
+      child: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: context.width * 0.15,
+            child: Container(
+                margin: EdgeInsets.all(context.normalValue),
+                padding: EdgeInsets.all(context.normalValue),
+                height: context.height,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(context.mediumValue),
                   boxShadow: [
                     BoxShadow(
                       //offset: Offset(0, 1),
-                      blurRadius: 20,
+                      blurRadius: context.normalValue,
                       //  color: Colors.blue.withOpacity(0.23),
                     ),
                   ],
                 ),
-                child: Container(
-                  child: SizedBox(
-                    width: size.width,
-                    child: FutureBuilder(
-                        future: getSingleCategory(),
-                        builder: getSingleCategory() != null
-                            ? (BuildContext context, AsyncSnapshot snapshot) {
-                                logger.i("getSingleCategory null değil");
-                                if (!snapshot.hasData) {
-                                  logger.i(
-                                      "getSingleCategory | snapshot.hasData null değil");
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: SizedBox(
+                      width: context.width,
+                      child: FutureBuilder(
+                          future: getSingleCategory(),
+                          builder: getSingleCategory() != null
+                              ? (BuildContext context, AsyncSnapshot snapshot) {
+                                  logger.i("getSingleCategory null değil");
+                                  if (!snapshot.hasData) {
+                                    logger.i(
+                                        "getSingleCategory | snapshot.hasData null değil");
+                                    return Center(
+                                        child: CircularProgressIndicator());
+                                  } //CIRCULAR INDICATOR
+                                  else {
+                                    return Text(
+                                        category.summary != null
+                                            ? category.summary
+                                            : "",
+                                        style: TextStyle(fontSize: 17));
+                                  }
+                                }
+                              : (BuildContext context, AsyncSnapshot snapshot) {
+                                  logger.i("getSingleCategory null geliyor");
                                   return Center(
                                       child: CircularProgressIndicator());
-                                } //CIRCULAR INDICATOR
-                                else {
-                                  return Text(category.summary != null
-                                      ? category.summary
-                                      : "");
-                                }
-                              }
-                            : (BuildContext context, AsyncSnapshot snapshot) {
-                                logger.i("getSingleCategory null geliyor");
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }),
+                                }),
+                    ),
                   ),
                 )),
-            SizedBox(
-              width: size.width,
-              height: size.height * 0.08,
+          ),
+
+          /// button
+          ///
+          Positioned(
+            bottom: 0,
+            child: SizedBox(
+              width: context.width,
+              height: context.width * 0.15,
               child: FlatButton(
                 color: Colors.red,
                 child: Text(
@@ -129,18 +117,18 @@ class DetailView extends DetailViewModel {
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(context.mediumValue),
+                    topRight: Radius.circular(context.mediumValue),
                   ),
                 ),
                 onPressed: () {
-                  navigation.navigateToPageClear(
+                  navigation.navigateToPage(
                       path: NavigationConstants.QUIZ_VIEW);
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

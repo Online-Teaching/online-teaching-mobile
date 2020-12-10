@@ -1,37 +1,30 @@
-import 'package:circle_chart/circle_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_circular_chart/flutter_circular_chart.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/profile_view_model.dart';
+import 'package:online_teaching_mobile/core/component/appbar_with_stack.dart';
+import 'package:online_teaching_mobile/core/component/quiz_result_card.dart';
 import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:step_progress_indicator/step_progress_indicator.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:toast/toast.dart';
 
 class ProfileView extends ProfileViewModel {
   final logger = Logger(printer: SimpleLogPrinter('profile_view.dart'));
-  Size size;
-
-  @override
-  void initState() {
-    super.initState();
-    getLocalData();
-  }
-
+  bool exitButtonVisible = true;
   @override
   Widget build(BuildContext context) {
     logger.i("build");
-    logger.i("build | profile point-> $star");
-
-    size = MediaQuery.of(context).size;
-    return Container(
-      child: Column(
-        children: [appbar(size, context), body()],
+    return Scaffold(
+      body: Container(
+        child: Column(
+          children: [appbar(context), body()],
+        ),
       ),
     );
   }
@@ -46,247 +39,213 @@ class ProfileView extends ProfileViewModel {
     preferences = await SharedPreferences.getInstance();
     quizid = preferences.getStringList("quizid");
     quizNote = preferences.getStringList("quizNote");
-
     logger.i("getLocalData | quizid -> $quizid");
     logger.i("getLocalData | quizNote -> $quizNote");
   }
 
-  Expanded appbar(Size size, BuildContext context) {
+//// current user
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
+  GoogleSignInAccount _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocalData();
+    try {
+      if (_googleSignIn != null) {
+        _googleSignIn.onCurrentUserChanged
+            .listen((GoogleSignInAccount account) {
+          setState(() {
+            _currentUser = account;
+          });
+          if (_currentUser != null) {
+            //_handleGetContact();
+
+          } else {}
+        });
+        _googleSignIn.signInSilently();
+      } else {}
+    } catch (e) {}
+  }
+
+  Future<void> _handleSignIn() async {
+    setState(() {});
+
+    try {
+      await _googleSignIn.signIn();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> _handleSignOut() {
+    try {
+      _googleSignIn.disconnect();
+      _googleSignIn = null;
+    } catch (e) {}
+  }
+
+  Expanded appbar(BuildContext context) {
     return Expanded(
       flex: 2,
-      child: Container(
-        margin: EdgeInsets.only(bottom: 4),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 4),
+            height: context.height * 0.2,
+            child: Stack(
+              overflow: Overflow.visible,
+              alignment: Alignment.center,
+              children: <Widget>[
+                MyAppBarWithStack(
+                  text:
+                      _currentUser != null ? _currentUser.displayName : "Hey !",
+                  radius: context.highValue,
+                ),
+                Positioned(
+                  right: context.lowValue,
+                  top: context.mediumValue,
+                  child: SizedBox(
+                    width: context.highValue * 0.6,
+                    child: Visibility(
+                      visible: _currentUser == null ? false : exitButtonVisible,
+                      child: FloatingActionButton(
+                          backgroundColor: Colors.white,
+                          child: Icon(
+                            Icons.exit_to_app,
+                            color: Colors.red,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              exitButtonVisible = false;
 
-        /// searchin altındaki margin
-        // It will cover 20% of our total height
-        height: size.height * 0.2,
-        child: Stack(
-          overflow: Overflow.visible,
-          alignment: Alignment.center,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-              ),
-              height: size.height,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(36),
-                  bottomRight: Radius.circular(36),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    //offset: Offset(0, 1),
-                    blurRadius: 20,
-                    //  color: Colors.blue.withOpacity(0.23),
+                              try {
+                                String email = _currentUser.email;
+                                Toast.show(
+                                    "$email hesabından çıkış yapıldı.", context,
+                                    duration: Toast.LENGTH_LONG,
+                                    gravity: Toast.BOTTOM);
+                              } catch (e) {}
+                              _handleSignOut();
+                            });
+                          }),
+                    ),
                   ),
-                ],
-              ),
-            ),
-            Positioned(
-              top: 40,
-              child: Container(
-                child: Text(
-                  "EDA ERSU",
-                  style: Theme.of(context).textTheme.headline5.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
-              ),
+                Positioned(
+                  bottom: -context.highValue,
+                  child: Container(
+                      width: context.width * 0.4,
+                      height: context.width * 0.4,
+                      child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          backgroundImage: _currentUser != null
+                              ? (_currentUser.photoUrl == null
+                                  ? AssetImage(
+                                      'assets/images/default_photo.png')
+                                  : NetworkImage(_currentUser.photoUrl))
+                              : AssetImage('assets/images/default_photo.png'))),
+                ),
+                Positioned(
+                  bottom: -(context.highValue + 30),
+                  child: Row(
+                    //mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                          width: context.mediumValue,
+                          height: context.mediumValue,
+                          child: Image.asset('assets/images/star2.png')),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      FutureBuilder(
+                          future: getAverage(),
+                          builder:
+                              (BuildContext context, AsyncSnapshot snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(star.toStringAsFixed(2),
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold));
+                            } else {
+                              getAverage();
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          }),
+                    ],
+                  ),
+                )
+              ],
             ),
-            Positioned(
-              bottom: -80,
-              child: Container(
-                  width: 170,
-                  height: 170,
-                  child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.white,
-                    backgroundImage: NetworkImage(
-                        'https://image.freepik.com/vecteurs-libre/robot-mignon-prendre-selfie-photo-icone-isole-fond-bleu-intelligence-artificielle-technologie-moderne_48369-13410.jpg'),
-                  )),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Expanded body() {
     return Expanded(
-      flex: 5,
-      child: Container(
-        margin: EdgeInsets.only(top: 80),
-        child: Column(
-          children: [
-            Expanded(
-                flex: 1,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset('assets/images/star2.png')),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    FutureBuilder(
-                        future: getAverage(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.hasData) {
-                            return Text(star.toStringAsFixed(2),
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold));
-                          } else {
-                            getAverage();
-                            return Center(child: CircularProgressIndicator());
-                          }
-                        }),
-                  ],
-                )),
-            Expanded(
-              flex: 10,
-              child: Container(
-                  child: FutureBuilder(
-                future: getSubjects(),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  logger.i("body | quizid -> $quizid");
-                  logger.i("body | quizNote -> $quizNote");
-                  if (snapshot.hasData) {
-                    logger.i("body | snapshot.hasData true");
-                    if (snapshot.hasData != null) {
-                      logger.i("body | snapshot.hasData null değil");
-
-                      if (mySubjectList_service.length == 0) {
-                        logger.i(
-                            "body | mySubjectList_service.length=0 (çözülmüş quiz yok) ");
-                        return Center(
-                          child: Text("Henüz hiç Quiz çözmedin."),
-                        );
-                      } else {
-                        logger.i("body | listelenecek quiz sonucu var.");
-                        return ListView.builder(
-                            itemCount: quizid.length,
-                            scrollDirection: Axis.vertical,
-                            itemBuilder: (context, index) {
-                              try {
-                                return testCard(
-                                    mySubjectList_service[index], index);
-                              } catch (e) {
-                                logger.e("body | show ListView error");
-                              }
-                            });
-                      }
-                    } else {
-                      logger.i("body | snapshot.hasData null");
-                      return Center(
-                        child: Text("quiz yok"),
-                      );
-                    }
-                  } else {
-                    logger.i("body | snapshot.hasData false");
-
+      flex: 3,
+      child: SizedBox(
+        child: Container(
+          child: FutureBuilder(
+            future: getSubjects(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              logger.i("body | quizid -> $quizid");
+              logger.i("body | quizNote -> $quizNote");
+              if (snapshot.hasData) {
+                if (snapshot.hasData != null) {
+                  if (mySubjectList_service.length == 0) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: Text("Henüz hiç Quiz çözmedin."),
                     );
+                  } else {
+                    return ListView.builder(
+                        itemCount: quizid.length,
+                        scrollDirection: Axis.vertical,
+                        itemBuilder: (context, index) {
+                          try {
+                            return testCard(
+                                mySubjectList_service[index], index);
+                          } catch (e) {
+                            logger.e("body | show ListView error");
+                          }
+                        });
                   }
-                },
-              )),
-            ),
-          ],
+                } else {
+                  logger.i("body | snapshot.hasData null");
+                  return Center(
+                    child: Text("quiz yok"),
+                  );
+                }
+              } else {
+                logger.i("body | snapshot.hasData false");
+
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
         ),
       ),
     );
   }
 
   testCard(Subject mySubjectList_service, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.blueGrey[100],
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15),
-          bottomRight: Radius.circular(15),
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15),
-        ),
-      ),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                flex: 3,
-                child: new AnimatedCircularChart(
-                  size: Size.fromRadius(35),
-                  initialChartData: <CircularStackEntry>[
-                    new CircularStackEntry(
-                      <CircularSegmentEntry>[
-                        new CircularSegmentEntry(
-                          double.parse(quizNote[index + 1]),
-                          Colors.green,
-                          rankKey: 'completed',
-                        ),
-                        new CircularSegmentEntry(
-                          100 - double.parse(quizNote[index + 1]),
-                          Colors.blueGrey[200],
-                          rankKey: 'remaining',
-                        ),
-                      ],
-                      rankKey: 'progress',
-                    ),
-                  ],
-                  chartType: CircularChartType.Radial,
-                  percentageValues: true,
-                  holeLabel: quizNote[index + 1],
-                  labelStyle: new TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 6,
-                child: Text(
-                  mySubjectList_service.title.toUpperCase(),
-                  style: TextStyle(fontSize: 15),
-                ),
-              ),
-              Expanded(
-                flex: 3,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: FloatingActionButton(
-                        child: Icon(Icons.refresh),
-                        backgroundColor: Colors.green,
-                        heroTag: mySubjectList_service.id,
-                        onPressed: () {
-                          create_Url(mySubjectList_service.id, context);
-                          navigation.navigateToPage(
-                              path: NavigationConstants.DETAIL_VIEW);
-                        },
-                      ),
-                    ),
-                    Text(
-                      "Tekrar Çöz",
-                      style: TextStyle(fontSize: 13),
-                    )
-                  ],
-                ),
-              )
-            ],
-          )),
+    return AppQuizResultCard(
+      quizNote: int.parse(quizNote[index + 1]),
+      mySubjectList_service: mySubjectList_service,
+      index: index,
+      onpressed: () {
+        create_Url(mySubjectList_service.id, context);
+        navigation.navigateToPage(path: NavigationConstants.DETAIL_VIEW);
+      },
     );
   }
 
@@ -300,29 +259,17 @@ class ProfileView extends ProfileViewModel {
         category_url += String.fromCharCode(rune);
       }
     });
-
     api_category_url = category_url;
     api_sub_category_index = sub_category_url;
     logger.i("create_url | id konusuna gidiliyor.");
   }
+}
 
-  isIntNumber(String char) {
-    List<String> numberList = [
-      "0",
-      "1",
-      "2",
-      "3",
-      "4",
-      "5",
-      "6",
-      "7",
-      "8",
-      "9"
-    ];
-    if (numberList.contains(char)) {
-      return true;
-    } else {
-      return false;
-    }
+isIntNumber(String char) {
+  List<String> numberList = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  if (numberList.contains(char)) {
+    return true;
+  } else {
+    return false;
   }
 }

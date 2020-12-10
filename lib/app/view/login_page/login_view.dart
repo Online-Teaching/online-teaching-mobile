@@ -1,11 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/view_model/login_view_model.dart';
+import 'package:online_teaching_mobile/core/component/round_button.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
+import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
+import 'package:sk_alert_dialog/sk_alert_dialog.dart';
+import 'package:toast/toast.dart';
 
 class LoginView extends LoginViewModel {
   final logger = Logger(printer: SimpleLogPrinter('login_view.dart'));
+  bool gecis = false;
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
+  GoogleSignInAccount _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    try {
+      if (_googleSignIn != null) {
+        _googleSignIn.onCurrentUserChanged
+            .listen((GoogleSignInAccount account) {
+          setState(() {
+            _currentUser = account;
+          });
+          if (_currentUser != null) {
+            //_handleGetContact();
+
+          }
+        });
+        _googleSignIn.signInSilently();
+      }
+    } catch (e) {}
+  }
+
+  Future<void> _handleSignIn() async {
+    try {
+      await _googleSignIn.signIn();
+      userdisplayname = _currentUser.displayName;
+      userphotourl = _currentUser.photoUrl;
+      gecis = true;
+    } catch (error) {
+      print(error);
+    }
+
+    navigation.navigateToPageClear(path: NavigationConstants.BOTTOM_NAVIGATION);
+    Toast.show("Giriş Yapıldı", context,
+        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+  }
+
+  Future<void> _handleSignOut() {
+    try {
+      _googleSignIn.disconnect();
+      userdisplayname = "";
+      userphotourl = "";
+      _googleSignIn = null;
+    } catch (e) {}
+  }
+
   @override
   Widget build(BuildContext context) {
     logger.i("build");
@@ -27,100 +85,27 @@ class LoginView extends LoginViewModel {
               Color(0xff161d27),
             ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           ),
-          Center(
+          Container(
+            margin: EdgeInsets.only(bottom: context.height * 0.3),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  "Welcome!",
+                  "Öğrenmeye Başla !",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 38,
                       fontWeight: FontWeight.bold),
                 ),
                 SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
                   height: 20,
                 ),
                 Container(
                   height: 50,
-                  margin: EdgeInsets.only(left: 40, right: 40),
-                  child: TextField(
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "E-mail",
-                      hintStyle: TextStyle(color: Colors.grey.shade700),
-                      filled: true,
-                      fillColor: Color(0xff161d27).withOpacity(0.5),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: Colors.red)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: Colors.red)),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
-                  margin: EdgeInsets.only(left: 40, right: 40),
-                  child: TextField(
-                    obscureText: true,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: "Şifre",
-                      hintStyle: TextStyle(color: Colors.grey.shade700),
-                      filled: true,
-                      fillColor: Color(0xff161d27).withOpacity(0.5),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: Colors.red)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(30),
-                          borderSide: BorderSide(color: Colors.red)),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Container(
-                  height: 50,
                   width: double.infinity,
                   margin: EdgeInsets.only(left: 40, right: 40),
                   child: FlatButton(
-                    onPressed: () {
-                      navigation.navigateToPage(
-                          path: NavigationConstants.BOTTOM_NAVIGATION,
-                          data: 20);
-                    },
-                    color: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Text(
-                      "Giriş Yap",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                Container(
-                  height: 50,
-                  width: double.infinity,
-                  margin: EdgeInsets.only(left: 40, right: 40),
-                  child: FlatButton(
-                    onPressed: () {},
+                    onPressed: _handleSignIn,
                     color: Colors.red,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
@@ -135,17 +120,32 @@ class LoginView extends LoginViewModel {
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 20,
                 ),
-                Text(
-                  "Kayıl Ol",
-                  style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 10,
+                Container(
+                  height: 50,
+                  width: double.infinity,
+                  margin: EdgeInsets.only(left: 40, right: 40),
+                  child: FlatButton(
+                    onPressed: () {
+                      navigation.navigateToPage(
+                          path: NavigationConstants.BOTTOM_NAVIGATION);
+                    },
+                    color: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                            color: Colors.red,
+                            width: 1,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Text(
+                      "Giriş yapmadan devam et",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
-import 'package:online_teaching_mobile/app/model/category_model.dart';
-import 'package:online_teaching_mobile/app/model/quiz_model.dart';
-import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
+import 'package:online_teaching_mobile/app/view/quiz_page/build_stepper.dart';
 import 'package:online_teaching_mobile/app/view_model/quiz_view_model.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toast/toast.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class QuizView extends QuizViewModel {
   final logger = Logger(printer: SimpleLogPrinter('quiz_view.dart'));
@@ -45,52 +41,9 @@ class QuizView extends QuizViewModel {
     getLocalData();
   }
 
-  Future getLocalData() async {
-    preferences = await SharedPreferences.getInstance();
-    quizid = preferences.getStringList("quizid");
-    quizNote = preferences.getStringList("quizNote");
-
-    preferences.setStringList("quizid", quizid);
-    preferences.setStringList("quizNote", quizNote);
-
-    logger.i("getLocalData | quizid -> $quizid");
-    logger.i("getLocalData | quizNote -> $quizNote");
-  }
-
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        child: scaffoldWidget(context),
-        onWillPop: () {
-          return showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Confirm Exit"),
-                  content: Text("Are you sure you want to exit?"),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("YES"),
-                      onPressed: () {
-                        SystemNavigator.pop();
-                      },
-                    ),
-                    FlatButton(
-                      child: Text("NO"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                );
-              });
-          return Future.value(true);
-        });
-  }
-
-  Scaffold scaffoldWidget(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -113,6 +66,18 @@ class QuizView extends QuizViewModel {
         body: quizViewWidget());
   }
 
+  Future getLocalData() async {
+    preferences = await SharedPreferences.getInstance();
+    quizid = preferences.getStringList("quizid");
+    quizNote = preferences.getStringList("quizNote");
+
+    preferences.setStringList("quizid", quizid);
+    preferences.setStringList("quizNote", quizNote);
+
+    logger.i("getLocalData | quizid -> $quizid");
+    logger.i("getLocalData | quizNote -> $quizNote");
+  }
+
   Column quizViewWidget() {
     return Column(children: <Widget>[
       complete
@@ -126,7 +91,7 @@ class QuizView extends QuizViewModel {
                   ),
                   actions: <Widget>[
                     new FlatButton(
-                      child: new Text("Close"),
+                      child: new Text("Kapat"),
                       onPressed: () {
                         setQuizNote_SP(correct_answer * 10, myquiz.id);
                         complete = false;
@@ -148,26 +113,17 @@ class QuizView extends QuizViewModel {
                   future: getquiz(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
-                      logger.i("body | snapshot.hasData true");
-
                       if (snapshot.data != null) {
-                        logger.i("body | snapshot.hasData null değil");
-
                         if (myquiz.questionList.length == 0) {
-                          logger.i(
-                              "body | questionList boş geliyor, bu konunun quizi yok");
-
                           return Center(
                               child: Text("Bu konunun quizi bulunmuyor."));
                         } else {
-                          logger.i("body | quiz görüntülendi");
                           build_stapper();
                           return Stepper(
                             steps: steps,
                             type: stepperType,
                             currentStep: currentStep,
-                            onStepTapped: (step) =>
-                                setState(() => currentStep = step),
+                            //onStepTapped: (step) =>setState(() => currentStep = step),
                             onStepContinue: true
                                 ? () => setState(() {
                                       calculate_points(currentStep);
@@ -185,27 +141,6 @@ class QuizView extends QuizViewModel {
                       return Center(child: CircularProgressIndicator());
                     }
                   }),
-
-              /*Stepper(
-                                        steps: steps,
-                                        type: stepperType,
-                                        currentStep: currentStep,
-                                        onStepTapped: (step) => setState(() => currentStep = step),
-                                        onStepContinue: true
-                                            ? () => setState(() {
-                                                  print("heyyyyy nuuuuuuuuuuulllllllllllll");
-                        
-                                                  calculate_points(currentStep);
-                                                  if (currentStep != 9)
-                                                    ++currentStep;
-                                                  else if (currentStep == 9) {
-                                                    print("test bitti başka sayfaya geç");
-                                                    complete = true;
-                                                  }
-                                                })
-                                            : null,
-                                      ),
-                                      */
             )),
     ]);
   }
@@ -241,46 +176,17 @@ class QuizView extends QuizViewModel {
   }
 
   List<Widget> questionCard(int i) => <Widget>[
-        Container(
-          /// Container ı card ile sarmalayabilirsin !
-          padding: EdgeInsets.all(13),
-          child: Column(
-            children: [
-              Text(
-                myquiz.questionList[i].question,
-                style:
-                    context.textTheme.bodyText1.copyWith(color: Colors.black),
-              ),
-              eachRadioButton(myquiz.questionList[i].answer1, 1),
-              eachRadioButton(myquiz.questionList[i].answer2, 2),
-              eachRadioButton(myquiz.questionList[i].answer3, 3),
-              eachRadioButton(myquiz.questionList[i].answer4, 4),
-            ],
-          ),
+        MyStepper(
+          i: i,
+          myquiz: myquiz,
+          onpressed: (val) {
+            setState(() {
+              selectedRadioTile = val;
+            });
+          },
+          selectedradioTile: selectedRadioTile,
         )
       ];
-
-  RadioListTile eachRadioButton(String cevap, int i) {
-    return RadioListTile(
-      value: i,
-      groupValue: selectedRadioTile,
-      title: Text(
-        cevap,
-        style: TextStyle(fontSize: context.normalValue),
-      ),
-      onChanged: (val) {
-        setSelectedRadioTile(val);
-      },
-      activeColor: Colors.black,
-      selected: true,
-    );
-  }
-
-  setSelectedRadioTile(int val) {
-    setState(() {
-      selectedRadioTile = val;
-    });
-  }
 
   Future<void> setQuizNote_SP(int note, String id) async {
     // shared preferences ile quizid ve quiz not kaydet

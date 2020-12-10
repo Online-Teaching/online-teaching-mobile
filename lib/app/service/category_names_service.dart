@@ -1,12 +1,9 @@
 import 'dart:convert';
-
 import 'package:logger/logger.dart';
-import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart';
 import 'package:online_teaching_mobile/app/model/category_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ICategoryName.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
-
 import 'api/API.dart';
 import 'package:http/http.dart' as http;
 

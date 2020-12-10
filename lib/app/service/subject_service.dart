@@ -1,11 +1,8 @@
 import 'dart:convert';
-
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/interfaces/ISubject.dart';
-import 'package:online_teaching_mobile/core/constant/app_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
-
 import 'api/API.dart';
 import 'package:http/http.dart' as http;
 

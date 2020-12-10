@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/view/bookmark_page/bookmark.dart';
-import 'package:online_teaching_mobile/app/view/detail_page/detail.dart';
 import 'package:online_teaching_mobile/app/view/home_page/home.dart';
 import 'package:online_teaching_mobile/app/view/profile_page/profile.dart';
 import 'package:online_teaching_mobile/app/view_model/bottom_navigation_view_model.dart';
+import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
+import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
 class BottomNavigationView extends BottomNavigationViewModel {
   final logger =
@@ -15,39 +17,66 @@ class BottomNavigationView extends BottomNavigationViewModel {
   @override
   Widget build(BuildContext context) {
     logger.i("build");
+    logger.e(userdisplayname);
     getQuizIdandQuizNote();
-    // List<String> sss = b_categories_name;
     final tabs = [Bookmark(), Home(), Profile()];
-    return Scaffold(
-      body: tabs[_currentindex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.red,
-        showUnselectedLabels: false,
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black38,
-        iconSize: 30,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentindex,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark),
-              title: Text('Kaydettiklerim'),
-              backgroundColor: Colors.red),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              title: Text('Ana sayfa'),
-              backgroundColor: Colors.blue),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person),
-              title: Text('Profil'),
-              backgroundColor: Colors.green)
-        ],
-        onTap: (index) {
-          setState(() {
-            _currentindex = index;
-          });
-        },
+    return WillPopScope(
+      child: Scaffold(
+        body: tabs[_currentindex],
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.red,
+          showUnselectedLabels: false,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.black38,
+          iconSize: context.mediumValue,
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _currentindex,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.bookmark),
+                title: Text('Kaydettiklerim'),
+                backgroundColor: Colors.red),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text('Ana sayfa'),
+                backgroundColor: Colors.blue),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                title: Text('Profil'),
+                backgroundColor: Colors.green)
+          ],
+          onTap: (index) {
+            setState(() {
+              _currentindex = index;
+            });
+          },
+        ),
       ),
+      onWillPop: () {
+        return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Çıkmak istiyor musun?"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text("Evet"),
+                    onPressed: () {
+                      SystemNavigator.pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Hayır"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+        return Future.value(true);
+      },
     );
   }
 }

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
-import 'package:online_teaching_mobile/app/model/subject_model.dart';
-import 'package:online_teaching_mobile/app/service/interfaces/ISubject.dart';
-import 'package:online_teaching_mobile/app/service/subject_service.dart';
 import 'package:online_teaching_mobile/app/view/splash_screen/splash_screen.dart';
-import 'package:online_teaching_mobile/core/constant/app_constant.dart';
+import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/init/navigation/navigation_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,37 +15,28 @@ abstract class SplashViewModel extends State<Splash> with BaseViewModel {
   List<String> myQuizIdList = [];
   List<String> myQuizNoteList = [];
   double ort;
+
+  /// sign in
+  GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: <String>[
+      'email',
+    ],
+  );
+  GoogleSignInAccount _currentUser;
   @override
   void initState() {
     super.initState();
 
     Future.delayed(
         Duration(
-          seconds: 3,
+          seconds: 12,
         ), () {
       logger.i("splash");
+      // login veya bottom
     });
   }
-
-/*  Future<void> getQuizIdandQuizNote() async {
-    try {
-      preferences = await SharedPreferences.getInstance();
-      myQuizNoteList = preferences.getStringList("quizNote");
-      int sum = 0;
-      int i = 0;
-      for (i = 1; i < myQuizNoteList.length; i++) {
-        sum += int.parse(myQuizNoteList[i]);
-      }
-      ort = sum / (myQuizNoteList.length - 1);
-
-      return 99999;
-    } catch (e) {
-      ort = 0;
-    }
-  }*/
 }
 
-/// categories ı çekip const a at
 abstract class BaseViewModel {
   NavigationService navigation = NavigationService.instance;
 }

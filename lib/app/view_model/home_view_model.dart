@@ -37,9 +37,10 @@ abstract class HomeViewModel extends State<Home> with BaseViewModel {
     });
   }
 
-  Future<void> getList2() async {
+  Future<void> getCategoriesNameList() async {
     categories_name = await categoryservice.getCategoriesNameList();
-    logger.i("getList2 | kategori isimleri çekildi");
+    logger.i("getCategoriesNameList | kategori isimleri çekildi");
+    logger.e(categories_name);
     return categories_name;
   }
 
