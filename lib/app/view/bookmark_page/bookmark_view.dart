@@ -4,8 +4,8 @@ import 'package:online_teaching_mobile/app/model/bookmark_subcategory_model.dart
 import 'package:online_teaching_mobile/app/model/subject_model.dart';
 import 'package:online_teaching_mobile/app/service/api/apiUrl.dart';
 import 'package:online_teaching_mobile/app/view_model/bookmark_view_model.dart';
-import 'package:online_teaching_mobile/core/component/appbar.dart';
-import 'package:online_teaching_mobile/core/component/sub_category.dart';
+import 'package:online_teaching_mobile/app/component/appbar.dart';
+import 'package:online_teaching_mobile/app/component/sub_category.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
