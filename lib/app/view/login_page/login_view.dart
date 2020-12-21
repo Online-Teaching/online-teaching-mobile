@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/view_model/login_view_model.dart';
-import 'package:online_teaching_mobile/core/component/round_button.dart';
+import 'package:online_teaching_mobile/app/component/round_button.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';

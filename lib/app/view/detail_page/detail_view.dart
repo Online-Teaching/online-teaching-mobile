@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
 import 'package:online_teaching_mobile/app/view_model/detail_view_model.dart';
-import 'package:online_teaching_mobile/core/component/appbar.dart';
+import 'package:online_teaching_mobile/app/component/appbar.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';

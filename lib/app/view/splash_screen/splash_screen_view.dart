@@ -4,7 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 import 'package:online_teaching_mobile/app/view_model/splash_screen_view_model.dart';
-import 'package:online_teaching_mobile/core/component/round_button.dart';
+import 'package:online_teaching_mobile/app/component/round_button.dart';
 import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 import 'package:online_teaching_mobile/core/constant/navigation_constant.dart';

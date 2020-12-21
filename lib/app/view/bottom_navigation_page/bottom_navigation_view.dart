@@ -5,7 +5,6 @@ import 'package:online_teaching_mobile/app/view/bookmark_page/bookmark.dart';
 import 'package:online_teaching_mobile/app/view/home_page/home.dart';
 import 'package:online_teaching_mobile/app/view/profile_page/profile.dart';
 import 'package:online_teaching_mobile/app/view_model/bottom_navigation_view_model.dart';
-import 'package:online_teaching_mobile/core/constant/user.dart';
 import 'package:online_teaching_mobile/core/logger/logger.dart';
 import 'package:online_teaching_mobile/core/extension/context_extension.dart';
 
