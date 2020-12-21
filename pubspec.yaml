@@ -26,6 +26,24 @@ dependencies:
   http: 0.12.2
   dio: 1.0.0
   flappy_search_bar: ^1.4.1
+  lottie: 0.7.0+1
+  percent_indicator: "^2.1.7+2"
+  syncfusion_flutter_gauges: ^18.2.44
+  toast: ^0.1.5
+  flutter_launcher_icons: ^0.7.5
+  shared_preferences: 0.5.12+4
+  step_progress_indicator: 0.2.5+8 
+  circle_chart: 0.0.3
+  flutter_circular_chart: 0.1.0
+  logger: ^0.6.0
+  google_sign_in: 4.5.6
+  sk_alert_dialog: 1.0.0
+ 
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/logo/logo.jpg"
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -35,12 +53,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_name: "^0.0.1"
+
+flutter_launcher_name:
+  name: "Online Teach"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - assets/images/
+    - assets/lottie_json/
+    - assets/logo/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

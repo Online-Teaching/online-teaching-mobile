@@ -1,0 +1,3 @@
+String userphotourl = "";
+
+String userdisplayname = "";
