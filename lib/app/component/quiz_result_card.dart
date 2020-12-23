@@ -46,12 +46,13 @@ class AppQuizResultCard extends StatelessWidget {
                     new CircularStackEntry(
                       <CircularSegmentEntry>[
                         new CircularSegmentEntry(
-                          quizNote.toDouble(),
+                          quizNote.toDouble(), // doğru
                           Colors.green,
                           rankKey: 'completed',
                         ),
                         new CircularSegmentEntry(
-                          100 - quizNote.toDouble(),
+                          double.parse(mySubjectList_service.length) *
+                              100, // tamamı
                           Colors.blueGrey[200],
                           rankKey: 'remaining',
                         ),

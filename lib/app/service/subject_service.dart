@@ -18,16 +18,19 @@ class SubjectService implements ISubjecteService {
   SubjectService._init();
 
   Future<List<Subject>> getSubjectList() async {
-    API api = new API();
-    final baseUrl = api.getOnlineTeaching_2_Url();
-    var _response = await http.get("$baseUrl/konuid_title_list.json");
-    var jsonData = json.decode(_response.body);
+    try {
+      API api = new API();
+      final baseUrl = api.getOnlineTeaching_2_Url();
+      var _response = await http.get("$baseUrl/konuid_title_list.json");
+      var jsonData = json.decode(_response.body);
 
-    subjects = [];
-    for (var c in jsonData) {
-      subjects.add(Subject.fromJson(c));
+      subjects = [];
+      for (var c in jsonData) {
+        subjects.add(Subject.fromJson(c));
+      }
+      return subjects;
+    } catch (e) {
+      logger.i("error" + e.toString());
     }
-    logger.i("getSubjectList | konu listesi çekildi. ");
-    return subjects;
   }
 }
