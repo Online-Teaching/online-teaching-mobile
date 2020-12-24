@@ -60,8 +60,8 @@ abstract class BottomNavigationViewModel extends State<BottomNavigation>
       for (i = 1; i < myQuizNoteList.length; i++) {
         sum += int.parse(myQuizNoteList[i]);
       }
-      ort = sum / (myQuizNoteList.length);
-      star = ort / 10;
+      ort = sum / (myQuizNoteList.length - 1);
+      star = (ort * 5) / 100;
       logger.i("getQuizIdandQuizNote | user star -> $star");
       return ort;
     } catch (e) {}

@@ -33,10 +33,10 @@ class MyStepper extends StatelessWidget {
               : eachRadioButton(myquiz.questionList[i].answer1, 1),
           isAnswer2 == false
               ? Text("")
-              : eachRadioButton(myquiz.questionList[i].answer1, 2),
+              : eachRadioButton(myquiz.questionList[i].answer2, 2),
           isAnswer3 == false
               ? Text("")
-              : eachRadioButton(myquiz.questionList[i].answer1, 3),
+              : eachRadioButton(myquiz.questionList[i].answer3, 3),
           isAnswer4 == false
               ? Text("")
               : eachRadioButton(myquiz.questionList[i].answer4, 4),

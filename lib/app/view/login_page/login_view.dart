@@ -73,17 +73,8 @@ class LoginView extends LoginViewModel {
           Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/resim.png'),
+                    image: AssetImage('assets/images/back3.png'),
                     fit: BoxFit.cover)),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Colors.transparent,
-              Colors.transparent,
-              Color(0xff161d27).withOpacity(0.9),
-              Color(0xff161d27),
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           ),
           Container(
             margin: EdgeInsets.only(bottom: context.height * 0.3),
@@ -106,7 +97,7 @@ class LoginView extends LoginViewModel {
                   margin: EdgeInsets.only(left: 40, right: 40),
                   child: FlatButton(
                     onPressed: _handleSignIn,
-                    color: Colors.red,
+                    color: Colors.teal[600],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -131,12 +122,8 @@ class LoginView extends LoginViewModel {
                       navigation.navigateToPage(
                           path: NavigationConstants.BOTTOM_NAVIGATION);
                     },
-                    color: Colors.transparent,
+                    color: Colors.red,
                     shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                            color: Colors.red,
-                            width: 1,
-                            style: BorderStyle.solid),
                         borderRadius: BorderRadius.circular(30)),
                     child: Text(
                       "Giriş yapmadan devam et",
