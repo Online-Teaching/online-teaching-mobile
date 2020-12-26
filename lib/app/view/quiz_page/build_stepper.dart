@@ -13,6 +13,12 @@ class MyStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Question question = new Question();
+    question = myquiz.questionList[i];
+    bool isAnswer1 = question.answer1 != null;
+    bool isAnswer2 = question.answer2 != null;
+    bool isAnswer3 = question.answer3 != null;
+    bool isAnswer4 = question.answer4 != null;
     return Container(
       /// Container ı card ile sarmalayabilirsin !
       padding: EdgeInsets.all(13),
@@ -22,10 +28,18 @@ class MyStepper extends StatelessWidget {
             myquiz.questionList[i].question,
             style: context.textTheme.bodyText1.copyWith(color: Colors.black),
           ),
-          eachRadioButton(myquiz.questionList[i].answer1, 1),
-          eachRadioButton(myquiz.questionList[i].answer2, 2),
-          eachRadioButton(myquiz.questionList[i].answer3, 3),
-          eachRadioButton(myquiz.questionList[i].answer4, 4),
+          isAnswer1 == false
+              ? Text("")
+              : eachRadioButton(myquiz.questionList[i].answer1, 1),
+          isAnswer2 == false
+              ? Text("")
+              : eachRadioButton(myquiz.questionList[i].answer2, 2),
+          isAnswer3 == false
+              ? Text("")
+              : eachRadioButton(myquiz.questionList[i].answer3, 3),
+          isAnswer4 == false
+              ? Text("")
+              : eachRadioButton(myquiz.questionList[i].answer4, 4),
         ],
       ),
     );

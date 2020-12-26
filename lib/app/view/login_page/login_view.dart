@@ -73,17 +73,8 @@ class LoginView extends LoginViewModel {
           Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/resim.png'),
+                    image: AssetImage('assets/images/back3.png'),
                     fit: BoxFit.cover)),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-              Colors.transparent,
-              Colors.transparent,
-              Color(0xff161d27).withOpacity(0.9),
-              Color(0xff161d27),
-            ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           ),
           Container(
             margin: EdgeInsets.only(bottom: context.height * 0.3),
@@ -91,7 +82,7 @@ class LoginView extends LoginViewModel {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  "Öğrenmeye Başla !",
+                  "Giriş Yap",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 38,
@@ -104,18 +95,35 @@ class LoginView extends LoginViewModel {
                   height: 50,
                   width: double.infinity,
                   margin: EdgeInsets.only(left: 40, right: 40),
-                  child: FlatButton(
+                  child: RaisedButton(
                     onPressed: _handleSignIn,
-                    color: Colors.red,
+                    color: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      side: BorderSide(
+                          color: Colors.red[600],
+                          width: 1,
+                          style: BorderStyle.solid),
+                      borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Text(
-                      "Google ile giriş",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image(
+                          image: AssetImage('assets/logo/google.png'),
+                          width: 25,
+                          height: 25,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Text(
+                          "Google ile giriş",
+                          style: TextStyle(
+                              color: Colors.grey[700],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -131,17 +139,17 @@ class LoginView extends LoginViewModel {
                       navigation.navigateToPage(
                           path: NavigationConstants.BOTTOM_NAVIGATION);
                     },
-                    color: Colors.transparent,
+                    color: Colors.white,
                     shape: RoundedRectangleBorder(
                         side: BorderSide(
-                            color: Colors.red,
+                            color: Colors.red[600],
                             width: 1,
                             style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(30)),
+                        borderRadius: BorderRadius.circular(15)),
                     child: Text(
                       "Giriş yapmadan devam et",
                       style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.grey[700],
                           fontWeight: FontWeight.bold,
                           fontSize: 16),
                     ),

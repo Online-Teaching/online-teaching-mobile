@@ -16,8 +16,9 @@ class QuizView extends QuizViewModel {
   int correct_answer = 0;
   int wrong_answer = 0;
   int selectedRadio;
+  String totalquestionlength;
   //stepper
-  List<Step> steps = List<Step>(10);
+
   int currentStep = 0;
   bool complete = false;
   StepperType stepperType = StepperType.vertical;
@@ -84,16 +85,19 @@ class QuizView extends QuizViewModel {
           ? Expanded(
               child: Center(
                 child: AlertDialog(
-                  title: new Text("Puanınız"),
+                  title: new Text("Toplam soru sayısı: ${totalquestionlength}"),
                   content: new Text(
-                    "${correct_answer * 10}",
+                    "Doğru cevap sayısı : ${correct_answer} ",
                     style: TextStyle(fontSize: 30),
                   ),
                   actions: <Widget>[
                     new FlatButton(
                       child: new Text("Kapat"),
                       onPressed: () {
-                        setQuizNote_SP(correct_answer * 10, myquiz.id);
+                        int x = (100 * correct_answer);
+                        int y = myquiz.questionList.length;
+                        setQuizNote_SP(
+                            (x / y).toInt(), myquiz.id); // not kaydet
                         complete = false;
                         navigation.navigateToPageClear(
                             path: NavigationConstants.BOTTOM_NAVIGATION);
@@ -114,11 +118,14 @@ class QuizView extends QuizViewModel {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data != null) {
+                        List<Step> steps =
+                            List<Step>(myquiz.questionList.length);
                         if (myquiz.questionList.length == 0) {
                           return Center(
                               child: Text("Bu konunun quizi bulunmuyor."));
                         } else {
-                          build_stapper();
+                          build_stapper(steps, myquiz.questionList.length);
+                          int length = myquiz.questionList.length;
                           return Stepper(
                             steps: steps,
                             type: stepperType,
@@ -126,10 +133,12 @@ class QuizView extends QuizViewModel {
                             //onStepTapped: (step) =>setState(() => currentStep = step),
                             onStepContinue: true
                                 ? () => setState(() {
+                                      int length = myquiz.questionList.length;
+                                      totalquestionlength = length.toString();
                                       calculate_points(currentStep);
-                                      if (currentStep != 9)
+                                      if (currentStep != length - 1)
                                         ++currentStep;
-                                      else if (currentStep == 9) {
+                                      else if (currentStep == length - 1) {
                                         complete = true;
                                       }
                                     })
@@ -157,9 +166,9 @@ class QuizView extends QuizViewModel {
     selectedRadioTile = 0;
   }
 
-  void build_stapper() {
+  void build_stapper(List<Step> steps, int length) {
     logger.i("build_stepper | each step");
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < length; i++) {
       steps[i] = Step(
           isActive: true,
           title: Text(

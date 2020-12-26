@@ -105,7 +105,7 @@ class SplashView extends SplashViewModel {
   Container round_button(BuildContext context) {
     return Container(
       child: AppButton(
-        text: "Başla",
+        text: "Öğrenmeye Başla",
         onpressed: () {
           if (login) {
             navigation.navigateToPageClear(path: NavigationConstants.LOGIN);

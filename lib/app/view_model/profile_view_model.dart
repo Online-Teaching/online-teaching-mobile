@@ -88,9 +88,10 @@ abstract class ProfileViewModel extends State<Profile> with BaseViewModel {
         isExistQuiz = 1;
       }
 
-      star = myort / 20;
+      /*
+      star = myort / myQuizIdList.length;
       myort = sum / (myQuizNoteList.length - 1);
-
+     */
       return star;
     } catch (e) {
       return 0;
