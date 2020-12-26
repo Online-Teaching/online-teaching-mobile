@@ -15,10 +15,11 @@ class AppButton extends StatelessWidget {
         color: Colors.red,
         child: Text(
           this.text,
-          style: context.textTheme.bodyText2.copyWith(color: Colors.white),
+          style: context.textTheme.bodyText2
+              .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(context.highValue),
+          borderRadius: BorderRadius.circular(15),
         ),
         onPressed: onpressed,
       ),
