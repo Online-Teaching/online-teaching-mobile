@@ -1,5 +1,7 @@
-## Online Teaching Uygulaması
+# Online Teaching Uygulaması
 
+## Uygulamanın Play Store linki:
+## https://play.google.com/store/apps/details?id=com.robosummy.online_teaching_mobile
 <img src="github/video.gif" style='height: 100%; width: 100%; object-fit: contain'>
 
 <img src="github/login.png" width=140 height=280 align="left">
